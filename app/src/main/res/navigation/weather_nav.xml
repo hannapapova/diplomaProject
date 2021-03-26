@@ -11,13 +11,13 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" >
         <action
-            android:id="@+id/action_homeFragment_to_settingsFragment"
+            android:id="@+id/homeFragment_to_settingsFragment"
             app:destination="@id/settingsFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_favoritesFragment"
+            android:id="@+id/homeFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_detailsFragment"
+            android:id="@+id/homeFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
     </fragment>
     <fragment
@@ -26,10 +26,10 @@
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" >
         <action
-            android:id="@+id/action_favoritesFragment_to_homeFragment"
+            android:id="@+id/favoritesFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
         <action
-            android:id="@+id/action_favoritesFragment_to_searchFragment"
+            android:id="@+id/favoritesFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
     </fragment>
     <fragment
@@ -38,7 +38,7 @@
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" >
         <action
-            android:id="@+id/action_searchFragment_to_favoritesFragment"
+            android:id="@+id/searchFragment_to_favoritesFragment"
             app:destination="@id/favoritesFragment" />
     </fragment>
     <fragment
@@ -47,7 +47,7 @@
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" >
         <action
-            android:id="@+id/action_settingsFragment_to_homeFragment"
+            android:id="@+id/settingsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
     <fragment
@@ -56,7 +56,7 @@
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" >
         <action
-            android:id="@+id/action_detailsFragment_to_homeFragment"
+            android:id="@+id/detailsFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
 </navigation>
