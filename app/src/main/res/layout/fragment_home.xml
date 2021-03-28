@@ -275,7 +275,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/sunraise" />
+                    android:src="@drawable/sunrise" />
 
                 <TextView
                     android:layout_width="wrap_content"
