@@ -10,4 +10,5 @@
     <color name="end_color">#0090FF</color>
     <color name="start_color">#320849</color>
     <color name="second_main_color">#83FFFFFF</color>
+    <color name="back_color">#3CF1EBF1</color>
 </resources>

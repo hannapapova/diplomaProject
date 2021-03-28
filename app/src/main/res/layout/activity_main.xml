@@ -7,6 +7,17 @@
     android:background="@drawable/gradient_bg"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/fragment_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="25dp"
+        app:layout_constraintBottom_toBottomOf="@id/app_bar"
+        app:layout_constraintEnd_toEndOf="@id/app_bar"
+        app:layout_constraintStart_toStartOf="@id/app_bar"
+        app:layout_constraintTop_toTopOf="@id/app_bar" />
+
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
@@ -19,7 +30,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:navigationContentDescription="@string/favorite" />
+            app:navigationContentDescription="AppBar" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
