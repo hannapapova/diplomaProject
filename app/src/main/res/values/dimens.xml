@@ -1,3 +1,7 @@
 <resources>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="margin_home">8dp</dimen>
+    <dimen name="margin_back_home">30dp</dimen>
+    <dimen name="margin_home_icons">10dp</dimen>
+    <dimen name="margin_elements">30dp</dimen>
 </resources>
