@@ -26,11 +26,14 @@
             <RadioButton
                 android:id="@+id/celsius"
                 android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_height="match_parent"
                 android:text="Celsius °C"
                 android:textColor="@color/white" />
 
             <RadioButton
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:id="@+id/fahrenheit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -39,6 +42,8 @@
 
             <RadioButton
                 android:id="@+id/kelvin"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="Kelvin K"
@@ -62,6 +67,7 @@
                 android:id="@+id/speed_km_h"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="Km/h"
                 android:textColor="@color/white" />
 
@@ -69,12 +75,16 @@
                 android:id="@+id/speed_m_s"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="M/s"
                 android:textColor="@color/white" />
 
             <RadioButton
                 android:id="@+id/speed_mph"
                 android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_height="match_parent"
                 android:text="Mph"
                 android:textColor="@color/white" />
@@ -96,12 +106,15 @@
             <RadioButton
                 android:id="@+id/atm_mm"
                 android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_height="match_parent"
                 android:text="mmHg"
                 android:textColor="@color/white" />
 
             <RadioButton
                 android:id="@+id/atm_hPa"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="hPa"
@@ -125,11 +138,14 @@
                 android:id="@+id/time_twelve"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="24-h"
                 android:textColor="@color/white" />
 
             <RadioButton
                 android:id="@+id/time_twenty"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="12-h"
