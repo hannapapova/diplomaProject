@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:title="@string/settings"
-        android:id="@+id/settings"
-        android:icon="@drawable/settings_24"
+        android:id="@+id/toolbar_action"
+        android:title="@string/action_toolbar"
+        android:visible="false"
         app:showAsAction="ifRoom" />
 
 </menu>

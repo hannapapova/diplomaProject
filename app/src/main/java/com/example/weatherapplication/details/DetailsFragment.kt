@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.R
 import com.example.weatherapplication.setupBar
-import com.example.weatherapplication.setupNavigation
+import com.example.weatherapplication.setupBarActions
 
 class DetailsFragment : Fragment() {
     private val key = "DETAILS"
@@ -25,7 +25,7 @@ class DetailsFragment : Fragment() {
 
         title?.text = getString(R.string.details)
         setupBar(key, toolbar)
-        setupNavigation(key, view, toolbar)
+        setupBarActions(key, view, toolbar)
         return view
     }
 }

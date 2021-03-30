@@ -15,33 +15,26 @@ class MainActivity : AppCompatActivity() {
 
 internal fun setupBar(key: String, toolbar: Toolbar?) {
     toolbar?.menu?.clear()
+    toolbar?.inflateMenu(R.menu.toolbar_home)
+    toolbar?.navigationIcon = null
     when (key) {
         "HOME" -> {
-            toolbar?.inflateMenu(R.menu.toolbar_home)
             toolbar?.setNavigationIcon(R.drawable.star_border_24)
+            toolbar?.menu?.findItem(R.id.toolbar_action)?.setIcon(R.drawable.settings_24)
+            toolbar?.menu?.findItem(R.id.toolbar_action)?.isVisible = true
         }
         "FAVORITES" -> {
-            addBackButton(toolbar)
-            toolbar?.menu?.findItem(R.id.search)?.isVisible = true
-        }
-        "DETAILS" -> {
-            addBackButton(toolbar)
-        }
-        "SEARCH" -> {
-            addBackButton(toolbar)
+            toolbar?.menu?.findItem(R.id.toolbar_action)?.setIcon(R.drawable.search_24)
+            toolbar?.menu?.findItem(R.id.toolbar_action)?.isVisible = true
         }
         "SETTINGS" -> {
-            addBackButton(toolbar)
+            toolbar?.menu?.findItem(R.id.toolbar_action)?.setIcon(R.drawable.save_24)
+            toolbar?.menu?.findItem(R.id.toolbar_action)?.isVisible = true
         }
     }
 }
 
-private fun addBackButton(toolbar: Toolbar?) {
-    toolbar?.inflateMenu(R.menu.back_menu_with_search)
-    toolbar?.setNavigationIcon(R.drawable.arrow_back_24)
-}
-
-internal fun setupNavigation(key: String, view: View, toolbar: Toolbar?) {
+internal fun setupBarActions(key: String, view: View, toolbar: Toolbar?) {
     when (key) {
         "HOME" -> {
             toolbar?.setNavigationOnClickListener {
@@ -54,29 +47,16 @@ internal fun setupNavigation(key: String, view: View, toolbar: Toolbar?) {
             }
         }
         "FAVORITES" -> {
-            toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.favoritesFragment_to_homeFragment)
-            }
             toolbar?.setOnMenuItemClickListener {
                 Navigation.findNavController(view)
                     .navigate(R.id.favoritesFragment_to_searchFragment)
                 true
             }
         }
-        "DETAILS" -> {
-            toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.detailsFragment_to_homeFragment)
-            }
-        }
-        "SEARCH" -> {
-            toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view)
-                    .navigate(R.id.searchFragment_to_favoritesFragment)
-            }
-        }
         "SETTINGS" -> {
-            toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.settingsFragment_to_homeFragment)
+            toolbar?.setOnMenuItemClickListener {
+                //TODO сохранение настроек
+                true
             }
         }
     }
