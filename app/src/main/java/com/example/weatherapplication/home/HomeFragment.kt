@@ -7,10 +7,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
 import com.example.weatherapplication.R
 import com.example.weatherapplication.setupBar
-import com.example.weatherapplication.setupNavigation
+import com.example.weatherapplication.setupActionsBar
 
 class HomeFragment : Fragment() {
     private val key = "HOME"
@@ -26,7 +25,7 @@ class HomeFragment : Fragment() {
 
         title?.text = getString(R.string.home)
         setupBar(key, toolbar)
-        setupNavigation(key, view, toolbar)
+        setupActionsBar(key, view, toolbar)
         return view
     }
 }

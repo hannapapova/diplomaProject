@@ -22,7 +22,8 @@ internal fun setupBar(key: String, toolbar: Toolbar?) {
         }
         "FAVORITES" -> {
             addBackButton(toolbar)
-            toolbar?.menu?.findItem(R.id.search)?.isVisible = true
+            toolbar?.menu?.findItem(R.id.action)?.isVisible = true
+            toolbar?.menu?.findItem(R.id.action)?.setIcon(R.drawable.search_24)
         }
         "DETAILS" -> {
             addBackButton(toolbar)
@@ -32,6 +33,8 @@ internal fun setupBar(key: String, toolbar: Toolbar?) {
         }
         "SETTINGS" -> {
             addBackButton(toolbar)
+            toolbar?.menu?.findItem(R.id.action)?.isVisible = true
+            toolbar?.menu?.findItem(R.id.action)?.setIcon(R.drawable.save_24)
         }
     }
 }
@@ -41,7 +44,7 @@ private fun addBackButton(toolbar: Toolbar?) {
     toolbar?.setNavigationIcon(R.drawable.arrow_back_24)
 }
 
-internal fun setupNavigation(key: String, view: View, toolbar: Toolbar?) {
+internal fun setupActionsBar(key: String, view: View, toolbar: Toolbar?) {
     when (key) {
         "HOME" -> {
             toolbar?.setNavigationOnClickListener {
@@ -55,7 +58,7 @@ internal fun setupNavigation(key: String, view: View, toolbar: Toolbar?) {
         }
         "FAVORITES" -> {
             toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.favoritesFragment_to_homeFragment)
+                Navigation.findNavController(view).popBackStack()
             }
             toolbar?.setOnMenuItemClickListener {
                 Navigation.findNavController(view)
@@ -65,18 +68,21 @@ internal fun setupNavigation(key: String, view: View, toolbar: Toolbar?) {
         }
         "DETAILS" -> {
             toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.detailsFragment_to_homeFragment)
+                Navigation.findNavController(view).popBackStack()
             }
         }
         "SEARCH" -> {
             toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view)
-                    .navigate(R.id.searchFragment_to_favoritesFragment)
+                Navigation.findNavController(view).popBackStack()
             }
         }
         "SETTINGS" -> {
             toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.settingsFragment_to_homeFragment)
+                Navigation.findNavController(view).popBackStack()
+            }
+            toolbar?.setOnMenuItemClickListener {
+                //TODO Save settings
+                true
             }
         }
     }
