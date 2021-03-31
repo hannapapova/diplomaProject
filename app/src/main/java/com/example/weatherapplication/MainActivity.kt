@@ -58,7 +58,7 @@ internal fun setupActionsBar(key: String, view: View, toolbar: Toolbar?) {
         }
         "FAVORITES" -> {
             toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.favoritesFragment_to_homeFragment)
+                Navigation.findNavController(view).popBackStack()
             }
             toolbar?.setOnMenuItemClickListener {
                 Navigation.findNavController(view)
@@ -68,18 +68,17 @@ internal fun setupActionsBar(key: String, view: View, toolbar: Toolbar?) {
         }
         "DETAILS" -> {
             toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.detailsFragment_to_homeFragment)
+                Navigation.findNavController(view).popBackStack()
             }
         }
         "SEARCH" -> {
             toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view)
-                    .navigate(R.id.searchFragment_to_favoritesFragment)
+                Navigation.findNavController(view).popBackStack()
             }
         }
         "SETTINGS" -> {
             toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).navigate(R.id.settingsFragment_to_homeFragment)
+                Navigation.findNavController(view).popBackStack()
             }
             toolbar?.setOnMenuItemClickListener {
                 //TODO Save settings
