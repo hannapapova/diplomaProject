@@ -7,8 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="end_color">#0090FF</color>
-    <color name="start_color">#320849</color>
+    <color name="end_color_sunny">#0090FF</color>
+    <color name="start_color_sunny">#320849</color>
     <color name="second_main_color">#83FFFFFF</color>
     <color name="back_color">#3CF1EBF1</color>
+    <color name="end_color_rainy">#AAAAAA</color>
+    <color name="start_color_rainy">#39433C</color>
+    <color name="end_color_snow">#3FB6F6</color>
+    <color name="start_color_snow">#091F43</color>
+    <color name="end_color_storm">#270050</color>
+    <color name="start_color_storm">#02021B</color>
 </resources>
