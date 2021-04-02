@@ -29,6 +29,7 @@ class SettingsFragment : Fragment() {
         setupBackgroundColor(view)
         setupBar(key, toolbar)
         setupBarActions(key, view, toolbar)
+
         return view
     }
 }

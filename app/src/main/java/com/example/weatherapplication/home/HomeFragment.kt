@@ -32,6 +32,7 @@ class HomeFragment : Fragment() {
         setupStatusBarColor(window, requireContext())
         setupBar(key, toolbar)
         setupBarActions(key, view, toolbar)
+
         return view
     }
 }
