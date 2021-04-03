@@ -4,15 +4,16 @@ import com.example.weatherapplication.model.Response
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface WeatherApi {
-    @GET("onecall?lat={latitude}&lon={longitude}&units={units}&appid=f50a97432c54725678afdb6794cf9769")
+    @GET("onecall?appid=f50a97432c54725678afdb6794cf9769")
     fun getWeather(
-        @Path("latitude")
+        @Query("lat")
         latitude: Float,
-        @Path("longitude")
+        @Query("lon")
         longitude: Float,
-        @Path("units")
+        @Query("units")
         units: String
     ) : Call<Response>
 }

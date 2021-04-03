@@ -26,7 +26,7 @@ data class DailyWeather(
     val windGust: Float,
     @field:Json(name = "pop")
     val probabilityOfPrecipitation: Float,
-    val rain: Rain,
-    val snow: Snow,
+    val rain: Float,
+    val snow: Float,
     val weather: List<Weather>
 )
