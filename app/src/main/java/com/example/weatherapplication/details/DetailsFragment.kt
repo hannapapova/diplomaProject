@@ -1,6 +1,7 @@
 package com.example.weatherapplication.details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,13 +9,16 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
+import com.example.weatherapplication.koin.WeatherViewModel
 import com.example.weatherapplication.setupBackgroundColor
 import com.example.weatherapplication.setupBar
 import com.example.weatherapplication.setupBarActions
 import com.example.weatherapplication.setupTitle
+import org.koin.android.ext.android.inject
 
 class DetailsFragment : Fragment() {
     private val key = "DETAILS"
+    private val viewModel by inject<WeatherViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +33,7 @@ class DetailsFragment : Fragment() {
         setupBar(key, toolbar)
         setupBackgroundColor(view)
         setupBarActions(key, view, toolbar)
-      
+
         return view
     }
 }
