@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".settings.SettingsFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_back_home"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Temperature scales"
+            android:textColor="@color/second_main_color" />
+
+        <RadioGroup
+            android:id="@+id/temperature_scales"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/celsius">
+
+            <RadioButton
+                android:id="@+id/celsius"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:layout_height="match_parent"
+                android:text="Celsius °C"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:id="@+id/fahrenheit"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Fahrenheit °F"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/kelvin"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Kelvin K"
+                android:textColor="@color/white" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_home"
+            android:text="Wind scales"
+            android:textColor="@color/second_main_color" />
+
+        <RadioGroup
+            android:id="@+id/wind_scales"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/speed_km_h">
+
+            <RadioButton
+                android:id="@+id/speed_km_h"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:text="Km/h"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/speed_m_s"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:text="M/s"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/speed_mph"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:layout_height="match_parent"
+                android:text="Mph"
+                android:textColor="@color/white" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_home"
+            android:text="Atmospheric pressure"
+            android:textColor="@color/second_main_color" />
+
+        <RadioGroup
+            android:id="@+id/atmospheric_pressure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/atm_mm">
+
+            <RadioButton
+                android:id="@+id/atm_mm"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:text="mmHg"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/atm_hPa"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="hPa"
+                android:textColor="@color/white" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_home"
+            android:text="Visibility"
+            android:textColor="@color/second_main_color" />
+
+        <RadioGroup
+            android:id="@+id/visibility_settings"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/visibility_km">
+
+            <RadioButton
+                android:id="@+id/visibility_km"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:text="Km"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/visibility_ft"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:text="Ft"
+                android:textColor="@color/white" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_home"
+            android:text="Time"
+            android:textColor="@color/second_main_color" />
+
+        <RadioGroup
+            android:id="@+id/time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checkedButton="@+id/time_twelve">
+
+            <RadioButton
+                android:id="@+id/time_twelve"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:text="24-h"
+                android:textColor="@color/white" />
+
+            <RadioButton
+                android:id="@+id/time_twenty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
+                android:text="12-h"
+                android:textColor="@color/white" />
+        </RadioGroup>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
