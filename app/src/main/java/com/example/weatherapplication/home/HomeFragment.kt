@@ -1,6 +1,7 @@
 package com.example.weatherapplication.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,12 @@ import com.example.weatherapplication.*
 import com.example.weatherapplication.setupBarActions
 import com.example.weatherapplication.setupBar
 import com.example.weatherapplication.setupTitle
+import com.example.weatherapplication.koin.WeatherViewModel
+import org.koin.android.ext.android.inject
 
 class HomeFragment : Fragment() {
     private val key = "HOME"
+    private val viewModel by inject<WeatherViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,7 +28,6 @@ class HomeFragment : Fragment() {
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
         val title = activity?.findViewById<TextView>(R.id.fragment_name)
         val window = activity?.window
-
 
         setupTitle(title, key)
         setupToolBarBackgroundColor(toolbar, requireContext())
