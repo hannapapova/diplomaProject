@@ -1,16 +1,20 @@
 package com.example.weatherapplication
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.Window
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
 }
@@ -46,7 +50,7 @@ private fun addBackButton(toolbar: Toolbar?) {
     toolbar?.setNavigationIcon(R.drawable.arrow_back_24)
 }
 
-internal fun setupActionsBar(key: String, view: View, toolbar: Toolbar?) {
+internal fun setupBarActions(key: String, view: View, toolbar: Toolbar?) {
     when (key) {
         "HOME" -> {
             toolbar?.setNavigationOnClickListener {
@@ -88,4 +92,40 @@ internal fun setupActionsBar(key: String, view: View, toolbar: Toolbar?) {
             }
         }
     }
+}
+
+internal fun setupTitle(title: TextView?, key: String) {
+    when (key) {
+        "HOME" -> {
+            //TODO Set town name
+            title?.text = "Home"
+        }
+        "FAVORITES" -> {
+            title?.text = "Favorite"
+        }
+        "DETAILS" -> {
+            title?.text = "Details"
+        }
+        "SEARCH" -> {
+            title?.text = "Search"
+        }
+        "SETTINGS" -> {
+            title?.text = "Settings"
+        }
+    }
+}
+
+internal fun setupStatusBarColor(window: Window?, context: Context) {
+    //TODO Set color depending on weather status
+    window?.statusBarColor = ContextCompat.getColor(context, R.color.end_color_storm)
+}
+
+internal fun setupBackgroundColor(view: View) {
+    //TODO Set background depending on weather status
+    view.setBackgroundResource(R.drawable.storm_gradient_bg)
+}
+
+internal fun setupToolBarBackgroundColor(toolbar: Toolbar?, context: Context) {
+    //TODO Set color depending on weather status
+    toolbar?.setBackgroundColor(ContextCompat.getColor(context, R.color.end_color_storm))
 }

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollview"
-        android:requiresFadingEdge="vertical"
-        android:fadingEdgeLength="150dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fadingEdgeLength="150dp"
         android:overScrollMode="never"
+        android:requiresFadingEdge="vertical"
         tools:context=".home.HomeFragment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +25,7 @@
                 android:layout_height="100dp"
                 android:layout_marginTop="8dp"
                 android:contentDescription="status"
-                android:src="@drawable/mostly_sunny"
+                android:src="@drawable/severe_thunderstorm"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -33,7 +34,7 @@
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sunny"
+                android:text="Thunder"
                 android:textColor="@color/white"
                 android:textSize="40sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -91,7 +92,7 @@
                 <LinearLayout
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:background="@color/back_color"
+                    android:background="@drawable/round_bg"
                     android:orientation="horizontal"
                     android:padding="8dp">
 
@@ -136,7 +137,7 @@
                 <LinearLayout
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:background="#3CF1EBF1"
+                    android:background="@drawable/round_bg"
                     android:orientation="horizontal"
                     android:padding="8dp">
 
@@ -181,7 +182,7 @@
                 <LinearLayout
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:background="#3CF1EBF1"
+                    android:background="@drawable/round_bg"
                     android:orientation="horizontal"
                     android:padding="8dp">
 
@@ -226,7 +227,7 @@
                 <LinearLayout
                     android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:background="#3CF1EBF1"
+                    android:background="@drawable/round_bg"
                     android:orientation="horizontal"
                     android:padding="8dp">
 
@@ -343,6 +344,7 @@
                 app:constraint_referenced_ids="sunrise, sunset" />
 
             <View
+                android:id="@+id/sunset_sunrise_view"
                 android:layout_width="match_parent"
                 android:layout_height="5dp"
                 android:layout_marginStart="4dp"
@@ -353,8 +355,89 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sunset_sunrise_barrier" />
 
+            <TextView
+                android:id="@+id/recycler_hour"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_home"
+                android:gravity="center"
+                android:text="RECYCLER VIEW WITH WEATHER ON NEXT HOURS"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/sunset_sunrise_view" />
+
+            <LinearLayout
+                android:id="@+id/detail_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/margin_home"
+                android:background="@drawable/round_bg"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recycler_hour">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dew Point: 0°C"
+                        android:textColor="@color/second_main_color" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Precipitation: 0 mm"
+                        android:textColor="@color/second_main_color" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UV Index: 4"
+                        android:textColor="@color/second_main_color" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Visibility: 16 km"
+                        android:textColor="@color/second_main_color" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_home"
+                android:layout_marginBottom="@dimen/margin_home"
+                android:gravity="center"
+                android:text="RECYCLER VIEW WITH WEATHER ON WHOLE WEEK"
+                android:textColor="@color/white"
+                android:textSize="40sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_info" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
