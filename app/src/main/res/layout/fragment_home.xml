@@ -355,18 +355,18 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sunset_sunrise_barrier" />
 
-            <TextView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_hour"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_home"
                 android:gravity="center"
-                android:text="RECYCLER VIEW WITH WEATHER ON NEXT HOURS"
-                android:textColor="@color/white"
-                android:textSize="40sp"
+                tools:listitem="@layout/hourly_row"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/sunset_sunrise_view" />
+                app:layout_constraintTop_toBottomOf="@id/sunset_sunrise_view"/>
 
             <LinearLayout
                 android:id="@+id/detail_info"
@@ -425,18 +425,19 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_daily"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_home"
                 android:layout_marginBottom="@dimen/margin_home"
                 android:gravity="center"
-                android:text="RECYCLER VIEW WITH WEATHER ON WHOLE WEEK"
-                android:textColor="@color/white"
-                android:textSize="40sp"
+                tools:listitem="@layout/daily_row"
+                android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/detail_info" />
+                app:layout_constraintTop_toBottomOf="@id/detail_info"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
