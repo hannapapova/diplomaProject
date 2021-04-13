@@ -13,8 +13,8 @@ import androidx.navigation.Navigation
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main)
     }
 }
@@ -95,7 +95,7 @@ internal fun setupBarActions(key: String, view: View, toolbar: Toolbar?) {
 }
 
 internal fun setupTitle(title: TextView?, key: String) {
-    when (key) {
+    when(key){
         "HOME" -> {
             //TODO Set town name
             title?.text = "Home"
@@ -117,7 +117,7 @@ internal fun setupTitle(title: TextView?, key: String) {
 
 internal fun setupStatusBarColor(window: Window?, context: Context) {
     //TODO Set color depending on weather status
-    window?.statusBarColor = ContextCompat.getColor(context, R.color.end_color_storm)
+    window?.statusBarColor = ContextCompat.getColor(context,R.color.end_color_storm)
 }
 
 internal fun setupBackgroundColor(view: View) {

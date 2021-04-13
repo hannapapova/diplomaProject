@@ -28,6 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="Celsius °C"
                 android:textColor="@color/white" />
 
@@ -37,6 +38,8 @@
                 android:id="@+id/fahrenheit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="Fahrenheit °F"
                 android:textColor="@color/white" />
 
@@ -46,6 +49,8 @@
                 android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="Kelvin K"
                 android:textColor="@color/white" />
         </RadioGroup>
@@ -86,6 +91,8 @@
                 android:layout_marginTop="@dimen/margin_settings_buttons"
                 android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="Mph"
                 android:textColor="@color/white" />
         </RadioGroup>
@@ -118,6 +125,8 @@
                 android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="hPa"
                 android:textColor="@color/white" />
         </RadioGroup>
