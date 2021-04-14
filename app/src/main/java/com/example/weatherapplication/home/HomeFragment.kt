@@ -57,7 +57,6 @@ class HomeFragment : Fragment() {
 
     private fun setupCityInfo() {
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
-        val statusPicture = requireActivity().findViewById<ImageView>(R.id.status_picture)
         val status = requireActivity().findViewById<TextView>(R.id.status)
         val temperature = requireActivity().findViewById<TextView>(R.id.temperature)
         val humidity = requireActivity().findViewById<TextView>(R.id.humidity)
@@ -70,6 +69,7 @@ class HomeFragment : Fragment() {
         val visibility = requireActivity().findViewById<TextView>(R.id.visibility)
 
         timeSetup()
+        setStatusPicture(viewModel.weather.value?.current?.weather?.get(0)?.main.toString())
 
         title.text = viewModel.weather.value?.timezone.toString()
         status.text =
@@ -93,6 +93,21 @@ class HomeFragment : Fragment() {
         precipitation.text =
             "Precipitation: ".plus(viewModel.weather.value?.daily?.get(0)?.rain?.toString())
                 .plus(" mm")
+    }
+
+    private fun setStatusPicture(status: String) {
+        val statusPicture = requireActivity().findViewById<ImageView>(R.id.status_picture)
+        when (status) {
+            "Thunderstorm" -> statusPicture.setImageResource(R.drawable.severe_thunderstorm)
+            "Drizzle" -> statusPicture.setImageResource(R.drawable.drizzle)
+            "Rain" -> statusPicture.setImageResource(R.drawable.rain)
+            "Snow" -> statusPicture.setImageResource(R.drawable.snow)
+            "Mist", "Smoke",  "Fog" -> statusPicture.setImageResource(R.drawable.fog)
+            "Haze", "Dust", "Sand", "Ash" -> statusPicture.setImageResource(R.drawable.dust)
+            "Squall", "Tornado" -> statusPicture.setImageResource(R.drawable.tornado)
+            "Clear" -> statusPicture.setImageResource(R.drawable.mostly_sunny)
+            "Clouds" -> statusPicture.setImageResource(R.drawable.mostly_cloudy)
+        }
     }
 
     private fun timeSetup() {

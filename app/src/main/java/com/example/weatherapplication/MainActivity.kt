@@ -121,15 +121,15 @@ internal fun setupTitle(title: TextView?, key: String) {
 
 internal fun setupStatusBarColor(window: Window?, context: Context) {
     //TODO Set color depending on weather status
-    window?.statusBarColor = ContextCompat.getColor(context,R.color.end_color_storm)
+    window?.statusBarColor = ContextCompat.getColor(context,R.color.end_color_sunny)
 }
 
 internal fun setupBackgroundColor(view: View) {
     //TODO Set background depending on weather status
-    view.setBackgroundResource(R.drawable.storm_gradient_bg)
+    view.setBackgroundResource(R.drawable.sunny_gradient_bg)
 }
 
 internal fun setupToolBarBackgroundColor(toolbar: Toolbar?, context: Context) {
     //TODO Set color depending on weather status
-    toolbar?.setBackgroundColor(ContextCompat.getColor(context, R.color.end_color_storm))
+    toolbar?.setBackgroundColor(ContextCompat.getColor(context, R.color.end_color_sunny))
 }
