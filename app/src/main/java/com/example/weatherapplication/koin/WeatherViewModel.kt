@@ -12,11 +12,7 @@ class WeatherViewModel : ViewModel() {
 
     val weather = MutableLiveData<Response>()
 
-    init {
-        getResult()
-    }
-
-    private fun getResult() {
+    fun getResult() {
         RetrofitInstance.weatherApi.getWeather(53.893009F, 27.567444F, "metric").enqueue(object :
             Callback<Response> {
             override fun onFailure(call: Call<Response>, t: Throwable) {
