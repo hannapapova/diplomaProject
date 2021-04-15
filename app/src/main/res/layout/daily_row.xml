@@ -2,36 +2,38 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:padding="6dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="5dp"
     android:layout_marginEnd="10dp">
 
     <TextView
-        android:id="@+id/tv_daily_date"
+        android:id="@+id/rv_date_daily"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="April 13"
+        android:layout_marginTop="3dp"
         android:textColor="@color/second_main_color"
         android:textSize="17sp"
+        app:layout_constraintBottom_toTopOf="@+id/rv_day_daily"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_daily_week_day"
+        android:id="@+id/rv_day_daily"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Today"
+        android:layout_marginBottom="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         android:textColor="@color/white"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_daily_date" />
+        app:layout_constraintTop_toBottomOf="@id/rv_date_daily" />
 
     <ImageView
-        android:id="@+id/iv_daily_icon"
+        android:id="@+id/rv_icon_daily"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:adjustViewBounds="true"
@@ -41,7 +43,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_daily_day_temp"
+        android:id="@+id/rv_day_temp_daily"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -50,11 +52,11 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_daily_icon"
+        app:layout_constraintStart_toEndOf="@+id/rv_icon_daily"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_daily_night_temp"
+        android:id="@+id/rv_night_temp_daily"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+4°C"
@@ -63,6 +65,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:background="@drawable/round_bg"
         android:layout_width="match_parent"

@@ -9,8 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.weatherapplication.*
+import com.example.weatherapplication.adapter.DailyAdapter
+import com.example.weatherapplication.adapter.HourlyAdapter
 import com.example.weatherapplication.koin.WeatherViewModel
 import com.example.weatherapplication.setupBarActions
 import com.example.weatherapplication.setupBar
@@ -68,6 +71,7 @@ class HomeFragment : Fragment() {
         val uvIndex = requireActivity().findViewById<TextView>(R.id.uv_index)
         val visibility = requireActivity().findViewById<TextView>(R.id.visibility)
 
+        setupRecyclers()
         timeSetup()
         setStatusPicture(viewModel.weather.value?.current?.weather?.get(0)?.main.toString())
 
@@ -82,7 +86,8 @@ class HomeFragment : Fragment() {
         windSpeed.text = viewModel.weather.value?.current?.windSpeed.toString().plus(" km/h")
         reelFeel.text = viewModel.weather.value?.current?.feelsLike?.toInt().toString().plus("°C")
         rainChance.text =
-            viewModel.weather.value?.daily?.get(0)?.probabilityOfPrecipitation.toString()
+            viewModel.weather.value?.daily?.get(0)?.probabilityOfPrecipitation?.toInt().toString()
+                .plus(" %")
         dewPoint.text =
             "Dew Point: ".plus(viewModel.weather.value?.current?.dewPoint?.toInt().toString())
                 .plus("°C")
@@ -95,6 +100,14 @@ class HomeFragment : Fragment() {
                 .plus(" mm")
     }
 
+    private fun setupRecyclers() {
+        val dailyRecycler = requireActivity().findViewById<RecyclerView>(R.id.recycler_daily)
+        val hourlyRecycler = requireActivity().findViewById<RecyclerView>(R.id.recycler_hourly)
+
+        dailyRecycler.adapter = viewModel.weather.value?.let { DailyAdapter(it.daily) }
+        hourlyRecycler.adapter = viewModel.weather.value?.let { HourlyAdapter(it.hourly) }
+    }
+
     private fun setStatusPicture(status: String) {
         val statusPicture = requireActivity().findViewById<ImageView>(R.id.status_picture)
         when (status) {
@@ -102,7 +115,7 @@ class HomeFragment : Fragment() {
             "Drizzle" -> statusPicture.setImageResource(R.drawable.drizzle)
             "Rain" -> statusPicture.setImageResource(R.drawable.rain)
             "Snow" -> statusPicture.setImageResource(R.drawable.snow)
-            "Mist", "Smoke",  "Fog" -> statusPicture.setImageResource(R.drawable.fog)
+            "Mist", "Smoke", "Fog" -> statusPicture.setImageResource(R.drawable.fog)
             "Haze", "Dust", "Sand", "Ash" -> statusPicture.setImageResource(R.drawable.dust)
             "Squall", "Tornado" -> statusPicture.setImageResource(R.drawable.tornado)
             "Clear" -> statusPicture.setImageResource(R.drawable.mostly_sunny)
