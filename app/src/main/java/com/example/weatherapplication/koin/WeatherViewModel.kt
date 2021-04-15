@@ -13,22 +13,28 @@ class WeatherViewModel : ViewModel() {
     val weather = MutableLiveData<Response>()
 
     init {
+        Log.d("viewmodel", "init")
         getResult()
     }
 
     private fun getResult() {
+        Log.d("viewmodel", "get result")
         RetrofitInstance.weatherApi.getWeather(53.893009F, 27.567444F, "metric").enqueue(object :
             Callback<Response> {
             override fun onFailure(call: Call<Response>, t: Throwable) {
-                Log.e("WeatherViewModel", t.message.toString())
+                Log.d("viewmodel", "on failure")
+                Log.d("viewmodel", t.message.toString())
+                // Network Errors here
             }
 
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
                 if (response.isSuccessful) {
                     val responseBody = response.body()
+                    Log.d("viewmodel", responseBody.toString())
                     weather.value = responseBody
                 } else {
-                    Log.e("WeatherViewModel", response.errorBody().toString())
+                    Log.d("viewmodel", "on response, but nor successful")
+                    Log.d("viewmodel", response.errorBody().toString())
                 }
             }
         })

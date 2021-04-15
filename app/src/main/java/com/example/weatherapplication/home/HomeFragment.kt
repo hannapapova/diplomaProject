@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.weatherapplication.*
 import com.example.weatherapplication.setupBarActions
 import com.example.weatherapplication.setupBar
@@ -24,6 +25,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("viewmodel", "on create view")
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
         val title = activity?.findViewById<TextView>(R.id.fragment_name)
@@ -37,5 +39,14 @@ class HomeFragment : Fragment() {
         setupBarActions(key, view, toolbar)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d("viewmodel", "on view created")
+
+        viewModel.weather.observe(viewLifecycleOwner, Observer {
+            Log.d("viewmodel", "observing")
+        })
     }
 }
