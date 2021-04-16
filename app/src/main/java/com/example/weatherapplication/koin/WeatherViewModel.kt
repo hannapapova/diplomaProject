@@ -45,12 +45,24 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
                 if (response.isSuccessful) {
-                    val responseBody = response.body()
+                    val responseBody: Response = response.body()!!
                     Log.d("viewmodel", responseBody.toString())
 
-                    weather.value = responseBody
+//                    weather.value = responseBody
+                    Log.d("viewmodel", "_____________________________________________")
+                    Log.d("viewmodel", "Before deletion")
+                    Log.d("viewmodel", allData.value?.get(0).toString())
+                    Log.d("viewmodel", "After deletion")
                     deleteAllData()
+                    Log.d("viewmodel", allData.value?.get(0).toString())
+
+                    Log.d("viewmodel", "Before addibg")
+                    Log.d("viewmodel", allData.value?.get(0).toString())
+                    Log.d("viewmodel", "After adding")
                     responseBody?.let { addResponse(it) }
+                    Log.d("viewmodel", allData.value?.get(0).toString())
+
+                    weather.value = allData.value?.get(0)
                 } else {
                     Log.d("viewmodel", "on response, but not successful")
                     Log.d("viewmodel", response.errorBody().toString())
@@ -64,8 +76,14 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun addResponse(response: Response) =
-        viewModelScope.launch(Dispatchers.IO) { repository.addResponse(response) }
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addResponse(response)
+            allData = repository.readAllData()
+        }
 
     fun deleteAllData() =
-        viewModelScope.launch(Dispatchers.IO) { repository.deleteAllData() }
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteAllData()
+            allData = repository.readAllData()
+        }
 }
