@@ -11,8 +11,8 @@ interface ResponseDao {
     suspend fun addResponse(response: Response)
 
     @Query("SELECT * FROM response_table")
-    suspend fun readAllData(): LiveData<List<Response>>
+    fun readAllData(): LiveData<List<Response>>
 
-    @Delete
-    suspend fun deleteResponse(response: Response)
+    @Query("DELETE FROM response_table")
+    suspend fun deleteAllData()
 }

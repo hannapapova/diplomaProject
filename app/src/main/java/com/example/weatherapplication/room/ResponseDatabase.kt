@@ -19,7 +19,7 @@ import com.example.weatherapplication.model.*
         Snow::class,
         Temperature::class,
         Weather::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -42,7 +42,7 @@ abstract class ResponseDatabase : RoomDatabase() {
                     context.applicationContext,
                     ResponseDatabase::class.java,
                     "counters_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }

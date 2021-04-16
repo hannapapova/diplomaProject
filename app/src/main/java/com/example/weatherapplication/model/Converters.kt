@@ -83,7 +83,7 @@ class Converters {
     }
 
     @TypeConverter
-    fun fromAlertList(alertList: List<Alert>): String {
+    fun fromAlertList(alertList: List<Alert>?): String? {
 //        val moshi = Moshi.Builder().build()
         val listMyData = Types.newParameterizedType(
             MutableList::class.java,
@@ -91,7 +91,7 @@ class Converters {
         )
         val jsonAdapter: JsonAdapter<List<Alert>> =
             moshi.adapter<List<Alert>>(listMyData)
-        return jsonAdapter.toJson(alertList)
+        return jsonAdapter.nullSafe().toJson(alertList)
     }
 
     @TypeConverter
@@ -207,6 +207,22 @@ class Converters {
 //        val moshi = Moshi.Builder().build()
         val jsonAdapter: JsonAdapter<FeelsLike> =
             moshi.adapter(FeelsLike::class.java)
+        return jsonAdapter.fromJson(jsonString)
+    }
+
+    @TypeConverter
+    fun fromResponse(response: Response): String {
+//        val moshi = Moshi.Builder().build()
+        val jsonAdapter: JsonAdapter<Response> =
+            moshi.adapter(Response::class.java)
+        return jsonAdapter.toJson(response)
+    }
+
+    @TypeConverter
+    fun toResponse(jsonString: String): Response? {
+//        val moshi = Moshi.Builder().build()
+        val jsonAdapter: JsonAdapter<Response> =
+            moshi.adapter(Response::class.java)
         return jsonAdapter.fromJson(jsonString)
     }
 }

@@ -15,6 +15,7 @@ import com.example.weatherapplication.setupBar
 import com.example.weatherapplication.setupTitle
 import com.example.weatherapplication.koin.WeatherViewModel
 import org.koin.android.ext.android.inject
+import org.koin.core.context.loadKoinModules
 
 class HomeFragment : Fragment() {
     private val key = "HOME"
