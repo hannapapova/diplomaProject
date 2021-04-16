@@ -1,7 +1,9 @@
 package com.example.weatherapplication.model
 
+import androidx.room.Entity
 import com.squareup.moshi.Json
 
+@Entity(tableName = "response_table")
 data class Response(
     @field:Json(name = "lat")
     val latitude: Float,

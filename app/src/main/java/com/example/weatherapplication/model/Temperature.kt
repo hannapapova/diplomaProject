@@ -1,7 +1,9 @@
 package com.example.weatherapplication.model
 
+import androidx.room.Entity
 import com.squareup.moshi.Json
 
+@Entity(tableName = "temperature_table")
 data class Temperature(
     val day: Float,
     val night: Float,

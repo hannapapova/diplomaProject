@@ -1,14 +1,15 @@
 package com.example.weatherapplication.koin
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.weatherapplication.api.RetrofitInstance
 import com.example.weatherapplication.model.Response
 import retrofit2.Call
 import retrofit2.Callback
 
-class WeatherViewModel : ViewModel() {
+class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
     val weather = MutableLiveData<Response>()
 
