@@ -1,12 +1,8 @@
 package com.example.weatherapplication.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 
-@Entity(tableName = "hourly_weather_table")
 data class HourlyWeather(
-    @PrimaryKey
     @field:Json(name = "dt")
     val dateTime: Int,
     @field:Json(name = "temp")

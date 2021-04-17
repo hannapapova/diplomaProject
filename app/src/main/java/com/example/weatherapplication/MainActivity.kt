@@ -12,6 +12,11 @@ import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 
 class MainActivity : AppCompatActivity() {
+
+    private val SHARED_PREFS = "sharedPrefs"
+    private val RESPONSE = "response"
+    private var counter: Int = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         super.onCreate(savedInstanceState)

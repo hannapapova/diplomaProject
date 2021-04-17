@@ -37,13 +37,4 @@ class SearchFragment : Fragment() {
 
         return view
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewModel.getResult()
-        viewModel.weather.observe(viewLifecycleOwner, Observer {
-            tv_response.text = it.toString()
-        })
-    }
 }
