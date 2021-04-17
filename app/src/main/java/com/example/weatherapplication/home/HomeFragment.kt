@@ -8,14 +8,9 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.weatherapplication.*
-import com.example.weatherapplication.setupBarActions
-import com.example.weatherapplication.setupBar
-import com.example.weatherapplication.setupTitle
 import com.example.weatherapplication.koin.WeatherViewModel
 import org.koin.android.ext.android.inject
-import org.koin.core.context.loadKoinModules
 
 class HomeFragment : Fragment() {
     private val key = "HOME"
@@ -40,14 +35,5 @@ class HomeFragment : Fragment() {
         setupBarActions(key, view, toolbar)
 
         return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        Log.d("viewmodel", "on view created")
-
-        viewModel.weather.observe(viewLifecycleOwner, Observer {
-            Log.d("viewmodel", "observing")
-        })
     }
 }

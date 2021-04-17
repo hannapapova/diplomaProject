@@ -1,4 +1,4 @@
-package com.example.weatherapplication.room.repository
+package com.example.weatherapplication.room.database
 
 import com.example.weatherapplication.room.dao.ForecastDao
 import com.example.weatherapplication.room.entity.SavedCurrentWeather

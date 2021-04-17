@@ -7,5 +7,7 @@ import androidx.room.PrimaryKey
 data class SavedHourlyWeather(
     @PrimaryKey
     val dateTime: Int,
-    val temperature: Float
+    val temperature: Float,
+    val weatherMain: String,
+    val weatherDescription: String,
 )

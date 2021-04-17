@@ -12,7 +12,7 @@ import com.example.weatherapplication.room.entity.SavedHourlyWeather
 
 @Database(
     entities = [SavedCurrentWeather::class, SavedHourlyWeather::class, SavedDailyWeather::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class ForecastDatabase : RoomDatabase() {
@@ -34,7 +34,7 @@ abstract class ForecastDatabase : RoomDatabase() {
                     context.applicationContext,
                     ForecastDatabase::class.java,
                     "forecast_database"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 INSTANCE = instance
                 return instance
             }
