@@ -9,9 +9,6 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
-import com.example.weatherapplication.setupBarActions
-import com.example.weatherapplication.setupBar
-import com.example.weatherapplication.setupTitle
 import com.example.weatherapplication.koin.WeatherViewModel
 import org.koin.android.ext.android.inject
 
@@ -24,6 +21,7 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.d("viewmodel", "on create view")
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         val toolbar = activity?.findViewById<Toolbar>(R.id.toolbar)
         val title = activity?.findViewById<TextView>(R.id.fragment_name)
