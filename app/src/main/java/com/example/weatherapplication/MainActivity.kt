@@ -10,11 +10,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
-import com.example.weatherapplication.koin.WeatherViewModel
-import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
-    private val viewModel by inject<WeatherViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

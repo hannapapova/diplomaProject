@@ -25,7 +25,7 @@ data class CurrentWeather(
     val windGust: Float,
     @field:Json(name = "wind_deg")
     val windDirection: Int,
-    val rain: Rain,
-    val snow: Snow,
+    val rain: Rain?,
+    val snow: Snow?,
     val weather: List<Weather>
 )

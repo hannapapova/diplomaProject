@@ -1,7 +1,6 @@
 package com.example.weatherapplication.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +14,6 @@ import com.example.weatherapplication.*
 import com.example.weatherapplication.adapter.DailyAdapter
 import com.example.weatherapplication.adapter.HourlyAdapter
 import com.example.weatherapplication.koin.WeatherViewModel
-import com.example.weatherapplication.setupBarActions
-import com.example.weatherapplication.setupBar
-import com.example.weatherapplication.setupTitle
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -51,14 +47,16 @@ class HomeFragment : Fragment() {
         val refreshLayout =
             requireActivity().findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
 
+        setupObservers()
+        setupRecyclers()
+
         refreshLayout.setOnRefreshListener {
             viewModel.getResult()
-            setupCityInfo()
             refreshLayout.isRefreshing = false
         }
     }
 
-    private fun setupCityInfo() {
+    private fun setupObservers() {
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val status = requireActivity().findViewById<TextView>(R.id.status)
         val temperature = requireActivity().findViewById<TextView>(R.id.temperature)
@@ -70,74 +68,59 @@ class HomeFragment : Fragment() {
         val precipitation = requireActivity().findViewById<TextView>(R.id.precipitation)
         val uvIndex = requireActivity().findViewById<TextView>(R.id.uv_index)
         val visibility = requireActivity().findViewById<TextView>(R.id.visibility)
+        val statusPicture = requireActivity().findViewById<ImageView>(R.id.status_picture)
+        val sunrise = requireActivity().findViewById<TextView>(R.id.sunrise)
+        val sunset = requireActivity().findViewById<TextView>(R.id.sunset)
+        val lastUpdateTime = requireActivity().findViewById<TextView>(R.id.last_update_date)
 
-        setupRecyclers()
-        timeSetup()
-        setStatusPicture(viewModel.weather.value?.current?.weather?.get(0)?.main.toString())
+        val sunriseSunsetDateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
+        val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
-        title.text = viewModel.weather.value?.timezone.toString()
-        status.text =
-            viewModel.weather.value?.current?.weather?.get(0)?.description.toString().capitalize(
-                Locale.ENGLISH
-            )
-        temperature.text =
-            viewModel.weather.value?.current?.temperature?.toInt().toString().plus("°C")
-        humidity.text = viewModel.weather.value?.current?.humidity?.toInt().toString().plus(" %")
-        windSpeed.text = viewModel.weather.value?.current?.windSpeed.toString().plus(" km/h")
-        reelFeel.text = viewModel.weather.value?.current?.feelsLike?.toInt().toString().plus("°C")
-        rainChance.text =
-            viewModel.weather.value?.daily?.get(0)?.probabilityOfPrecipitation?.toInt().toString()
-                .plus(" %")
-        dewPoint.text =
-            "Dew Point: ".plus(viewModel.weather.value?.current?.dewPoint?.toInt().toString())
-                .plus("°C")
-        uvIndex.text =
-            "UV Index: ".plus(viewModel.weather.value?.current?.uvIndex?.toInt().toString())
-        visibility.text =
-            "Visibility: ".plus(viewModel.weather.value?.current?.visibility?.div(1000)).plus(" km")
-        precipitation.text =
-            "Precipitation: ".plus(viewModel.weather.value?.daily?.get(0)?.rain?.toString())
-                .plus(" mm")
+        viewModel.currentWeather.observe(viewLifecycleOwner, {
+            title.text = it.timezone
+            status.text = it.weatherDescription[0].toString().capitalize(Locale.ENGLISH)
+            temperature.text = it.temperature.toString().plus("°C")
+            humidity.text = it.humidity.toString().plus(" %")
+            windSpeed.text = it.windSpeed.toString().plus(" km/h")
+            reelFeel.text = it.feelsLike.toString().plus("°C")
+            dewPoint.text = "Dew Point: ".plus(it.dewPoint.toInt()).plus("°C")
+            uvIndex.text = "UV Index: ".plus(it.uvIndex.toInt())
+            visibility.text = "Visibility: ".plus(it.visibility.div(1000)).plus(" km")
+            statusPicture.setImageResource(getStatusImage(it.weatherMain))
+            sunrise.text =
+                sunriseSunsetDateFormat.format(Date(it.sunrise.toString().plus("000").toLong()))
+            sunset.text =
+                sunriseSunsetDateFormat.format(Date(it.sunset.toString().plus("000").toLong()))
+            lastUpdateTime.text =
+                currentDateFormat.format(Date(it.dateTime.toString().plus("000").toLong()))
+        })
+
+        viewModel.dailyWeather.observe(viewLifecycleOwner, {
+            rainChance.text = it[0].probabilityOfPrecipitation.times(100).toString().plus(" %")
+            precipitation.text = "Precipitation: ".plus(((it[0].snow + it[0].rain) / 2)).plus(" mm")
+        })
     }
 
     private fun setupRecyclers() {
         val dailyRecycler = requireActivity().findViewById<RecyclerView>(R.id.recycler_daily)
         val hourlyRecycler = requireActivity().findViewById<RecyclerView>(R.id.recycler_hourly)
 
-        dailyRecycler.adapter = viewModel.weather.value?.let { DailyAdapter(it.daily) }
-        hourlyRecycler.adapter = viewModel.weather.value?.let { HourlyAdapter(it.hourly) }
+        dailyRecycler.adapter = DailyAdapter(viewModel.dailyWeather.value)
+        hourlyRecycler.adapter = HourlyAdapter(viewModel.hourlyWeather.value)
     }
+}
 
-    private fun setStatusPicture(status: String) {
-        val statusPicture = requireActivity().findViewById<ImageView>(R.id.status_picture)
-        when (status) {
-            "Thunderstorm" -> statusPicture.setImageResource(R.drawable.severe_thunderstorm)
-            "Drizzle" -> statusPicture.setImageResource(R.drawable.drizzle)
-            "Rain" -> statusPicture.setImageResource(R.drawable.rain)
-            "Snow" -> statusPicture.setImageResource(R.drawable.snow)
-            "Mist", "Smoke", "Fog" -> statusPicture.setImageResource(R.drawable.fog)
-            "Haze", "Dust", "Sand", "Ash" -> statusPicture.setImageResource(R.drawable.dust)
-            "Squall", "Tornado" -> statusPicture.setImageResource(R.drawable.tornado)
-            "Clear" -> statusPicture.setImageResource(R.drawable.mostly_sunny)
-            "Clouds" -> statusPicture.setImageResource(R.drawable.mostly_cloudy)
-        }
-    }
-
-    private fun timeSetup() {
-        val sunrise = requireActivity().findViewById<TextView>(R.id.sunrise)
-        val sunset = requireActivity().findViewById<TextView>(R.id.sunset)
-        val lastUpdateTime = requireActivity().findViewById<TextView>(R.id.last_update_date)
-        val sunriseSunsetDateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
-        val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
-        val currentDate =
-            Date(viewModel.weather.value?.current?.dateTime.toString().plus("000").toLong())
-        val sunriseDate =
-            Date(viewModel.weather.value?.current?.sunrise.toString().plus("000").toLong())
-        val sunsetDate =
-            Date(viewModel.weather.value?.current?.sunset.toString().plus("000").toLong())
-
-        sunrise.text = sunriseSunsetDateFormat.format(sunriseDate)
-        sunset.text = sunriseSunsetDateFormat.format(sunsetDate)
-        lastUpdateTime.text = currentDateFormat.format(currentDate)
+internal fun getStatusImage(status: String?): Int {
+    return when (status) {
+        "Thunderstorm" -> R.drawable.severe_thunderstorm
+        "Drizzle" -> R.drawable.drizzle
+        "Rain" -> R.drawable.rain
+        "Snow" -> R.drawable.snow
+        "Mist", "Smoke", "Fog" -> R.drawable.fog
+        "Haze", "Dust", "Sand", "Ash" -> R.drawable.dust
+        "Squall", "Tornado" -> R.drawable.tornado
+        "Clear" -> R.drawable.mostly_sunny
+        "Clouds" -> R.drawable.mostly_cloudy
+        else -> R.drawable.mostly_sunny
     }
 }

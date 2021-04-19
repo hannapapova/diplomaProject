@@ -7,11 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
-import com.example.weatherapplication.model.HourlyWeather
+import com.example.weatherapplication.home.getStatusImage
+import com.example.weatherapplication.room.entity.SavedHourlyWeather
 import java.text.SimpleDateFormat
 import java.util.*
 
-class HourlyAdapter(private val weatherList: List<HourlyWeather>) :
+class HourlyAdapter(private val weatherList: List<SavedHourlyWeather>?) :
     RecyclerView.Adapter<HourlyAdapter.HourlyViewHolder>() {
 
     class HourlyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -27,14 +28,14 @@ class HourlyAdapter(private val weatherList: List<HourlyWeather>) :
     }
 
     override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
-        val currentItem = weatherList[position]
+        val currentItem = weatherList?.get(position)
         val timeFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
-        val time = Date(currentItem.dateTime.toString().plus("000").toLong())
+        val time = Date(currentItem?.dateTime.toString().plus("000").toLong())
 
         holder.time.text = timeFormat.format(time)
-        holder.picture.setImageResource(getImage(currentItem.weather[0].main))
-        holder.temperature.text = currentItem.temperature.toInt().toString().plus("°C")
+        holder.picture.setImageResource(getStatusImage(currentItem?.weatherMain))
+        holder.temperature.text = currentItem?.temperature?.toInt().toString().plus("°C")
     }
 
-    override fun getItemCount() = weatherList.size
+    override fun getItemCount() = weatherList!!.size
 }

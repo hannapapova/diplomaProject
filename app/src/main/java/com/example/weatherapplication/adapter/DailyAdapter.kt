@@ -7,11 +7,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
-import com.example.weatherapplication.model.DailyWeather
+import com.example.weatherapplication.home.getStatusImage
+import com.example.weatherapplication.room.entity.SavedDailyWeather
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DailyAdapter(private val weatherList: List<DailyWeather>) :
+class DailyAdapter(private val weatherList: List<SavedDailyWeather>?) :
     RecyclerView.Adapter<DailyAdapter.DailyViewHolder>() {
 
     class DailyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -30,33 +31,18 @@ class DailyAdapter(private val weatherList: List<DailyWeather>) :
     }
 
     override fun onBindViewHolder(holder: DailyViewHolder, position: Int) {
-        val currentItem = weatherList[position]
+        val currentItem = weatherList?.get(position)
         val dataMonthFormat = SimpleDateFormat("MMMM dd", Locale.ENGLISH)
         val dataDayFormat = SimpleDateFormat("EEEE", Locale.ENGLISH)
-        val currentDay = Date(currentItem.dateTime.toString().plus("000").toLong())
-        val currentMonth = Date(currentItem.dateTime.toString().plus("000").toLong())
+        val currentDay = Date(currentItem?.dateTime.toString().plus("000").toLong())
+        val currentMonth = Date(currentItem?.dateTime.toString().plus("000").toLong())
 
         holder.date.text = dataMonthFormat.format(currentMonth)
         holder.day.text = dataDayFormat.format(currentDay)
-        holder.picture.setImageResource(getImage(currentItem.weather[0].main))
-        holder.dayTemp.text = currentItem.temperature.day.toInt().toString().plus("°C")
-        holder.nightTemp.text = currentItem.temperature.night.toInt().toString().plus("°C")
+        holder.picture.setImageResource(getStatusImage(currentItem?.weatherMain))
+        holder.dayTemp.text = currentItem?.dayTemp?.toInt().toString().plus("°C")
+        holder.nightTemp.text = currentItem?.nightTemp?.toInt().toString().plus("°C")
     }
 
-    override fun getItemCount() = weatherList.size
-}
-
-internal fun getImage(status: String): Int {
-    return when (status) {
-        "Thunderstorm" -> R.drawable.severe_thunderstorm
-        "Drizzle" -> R.drawable.drizzle
-        "Rain" -> R.drawable.rain
-        "Snow" -> R.drawable.snow
-        "Mist", "Smoke", "Fog" -> R.drawable.fog
-        "Haze", "Dust", "Sand", "Ash" -> R.drawable.dust
-        "Squall", "Tornado" -> R.drawable.tornado
-        "Clear" -> R.drawable.mostly_sunny
-        "Clouds" -> R.drawable.mostly_cloudy
-        else -> R.drawable.mostly_sunny
-    }
+    override fun getItemCount() = weatherList!!.size
 }
