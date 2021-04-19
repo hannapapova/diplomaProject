@@ -1,9 +1,8 @@
-package com.example.weatherapplication.api
+package com.example.weatherapplication.api.forecast
 
-import com.example.weatherapplication.model.Response
+import com.example.weatherapplication.model.forecast.Response
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface WeatherApi {

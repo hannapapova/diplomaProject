@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weatherapplication.api.RetrofitInstance
-import com.example.weatherapplication.model.Response
+import com.example.weatherapplication.model.forecast.Response
 import com.example.weatherapplication.room.database.ForecastDatabase
 import com.example.weatherapplication.room.database.ForecastRepository
 import com.example.weatherapplication.room.entity.SavedCurrentWeather
