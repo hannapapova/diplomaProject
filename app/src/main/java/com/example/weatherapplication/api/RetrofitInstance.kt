@@ -10,7 +10,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 object RetrofitInstance {
 
     private const val baseUrlForecast = "https://api.openweathermap.org/data/2.5/"
-    private const val baseUrlCity = "https://api.geonames.org/"
+    private const val baseUrlCity = "http://api.geonames.org/"
 
     private val loggingInterceptor = HttpLoggingInterceptor()
         .setLevel(HttpLoggingInterceptor.Level.BODY)

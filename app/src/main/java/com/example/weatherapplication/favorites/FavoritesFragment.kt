@@ -37,16 +37,14 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.currentWeather.observe(viewLifecycleOwner, Observer {
+        viewModel.getResult()
+
+        viewModel.cities.observe(viewLifecycleOwner, Observer {
             tv_current.text = it?.toString() ?: "wait"
         })
 
-        viewModel.hourlyWeather.observe(viewLifecycleOwner, Observer {
+        viewModel.currentWeather.observe(viewLifecycleOwner, Observer{
             tv_hourly.text = it?.toString() ?: "wait"
-        })
-
-        viewModel.dailyWeather.observe(viewLifecycleOwner, Observer {
-            tv_daily.text = it?.toString() ?: "wait"
         })
     }
 }
