@@ -77,27 +77,37 @@ class HomeFragment : Fragment() {
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
         viewModel.currentWeather.observe(viewLifecycleOwner, {
-            title.text = it.timezone
-            status.text = it.weatherDescription[0].toString().capitalize(Locale.ENGLISH)
-            temperature.text = it.temperature.toString().plus("°C")
-            humidity.text = it.humidity.toString().plus(" %")
-            windSpeed.text = it.windSpeed.toString().plus(" km/h")
-            reelFeel.text = it.feelsLike.toString().plus("°C")
-            dewPoint.text = "Dew Point: ".plus(it.dewPoint.toInt()).plus("°C")
-            uvIndex.text = "UV Index: ".plus(it.uvIndex.toInt())
-            visibility.text = "Visibility: ".plus(it.visibility.div(1000)).plus(" km")
-            statusPicture.setImageResource(getStatusImage(it.weatherMain))
-            sunrise.text =
+            title.text = it?.timezone ?: "wait"
+            status.text =
+                it?.weatherDescription?.get(0)?.toString()?.capitalize(Locale.ENGLISH) ?: "wait"
+            temperature.text = it?.temperature.toString().plus("°C") ?: "wait"
+            humidity.text = it?.humidity.toString().plus(" %") ?: "wait"
+            windSpeed.text = it?.windSpeed.toString().plus(" km/h") ?: "wait"
+            reelFeel.text = it?.feelsLike.toString().plus("°C") ?: "wait"
+            dewPoint.text = "Dew Point: ".plus(it?.dewPoint?.toInt()).plus("°C") ?: "wait"
+            uvIndex.text = "UV Index: ".plus(it?.uvIndex?.toInt()) ?: "wait"
+            visibility.text = "Visibility: ".plus(it?.visibility?.div(1000)).plus(" km") ?: "wait"
+            statusPicture.setImageResource(getStatusImage(it?.weatherMain))
+            sunrise.text = if (it?.sunrise != null)
                 sunriseSunsetDateFormat.format(Date(it.sunrise.toString().plus("000").toLong()))
-            sunset.text =
+            else "wait"
+
+            sunset.text = if (it?.sunset != null)
                 sunriseSunsetDateFormat.format(Date(it.sunset.toString().plus("000").toLong()))
-            lastUpdateTime.text =
+            else "wait"
+
+            lastUpdateTime.text = if (it?.dateTime != null)
                 currentDateFormat.format(Date(it.dateTime.toString().plus("000").toLong()))
+            else "wait"
         })
 
         viewModel.dailyWeather.observe(viewLifecycleOwner, {
-            rainChance.text = it[0].probabilityOfPrecipitation.times(100).toString().plus(" %")
-            precipitation.text = "Precipitation: ".plus(((it[0].snow + it[0].rain) / 2)).plus(" mm")
+            if (it?.size != 0) {
+                rainChance.text =
+                    it?.get(0)?.probabilityOfPrecipitation?.times(100).toString().plus(" %")
+                precipitation.text =
+                    "Precipitation: ".plus(((it[0].snow + it[0].rain) / 2)).plus(" mm")
+            }
         })
     }
 
@@ -105,8 +115,19 @@ class HomeFragment : Fragment() {
         val dailyRecycler = requireActivity().findViewById<RecyclerView>(R.id.recycler_daily)
         val hourlyRecycler = requireActivity().findViewById<RecyclerView>(R.id.recycler_hourly)
 
-        dailyRecycler.adapter = DailyAdapter(viewModel.dailyWeather.value)
-        hourlyRecycler.adapter = HourlyAdapter(viewModel.hourlyWeather.value)
+        viewModel.dailyWeather.observe(viewLifecycleOwner, {
+            if (it?.size != 0)
+                dailyRecycler.adapter = DailyAdapter(it)
+        })
+
+//        dailyRecycler.adapter = DailyAdapter(viewModel.dailyWeather.value)
+
+        viewModel.hourlyWeather.observe(viewLifecycleOwner, {
+            if (it?.size != 0)
+                hourlyRecycler.adapter = HourlyAdapter(it)
+        })
+
+//        hourlyRecycler.adapter = HourlyAdapter(viewModel.hourlyWeather.value)
     }
 }
 

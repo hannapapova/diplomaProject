@@ -20,9 +20,9 @@ import retrofit2.Callback
 class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ForecastRepository
-    var currentWeather: LiveData<SavedCurrentWeather>
-    var hourlyWeather: LiveData<List<SavedHourlyWeather>>
-    var dailyWeather: LiveData<List<SavedDailyWeather>>
+    lateinit var currentWeather: LiveData<SavedCurrentWeather>
+    lateinit var hourlyWeather: LiveData<List<SavedHourlyWeather>>
+    lateinit var dailyWeather: LiveData<List<SavedDailyWeather>>
 
     init {
         Log.d("viewmodel", "init")
