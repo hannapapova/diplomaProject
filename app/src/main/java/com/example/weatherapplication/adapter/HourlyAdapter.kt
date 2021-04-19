@@ -37,5 +37,5 @@ class HourlyAdapter(private val weatherList: List<SavedHourlyWeather>?) :
         holder.temperature.text = currentItem?.temperature?.toInt().toString().plus("°C")
     }
 
-    override fun getItemCount() = weatherList!!.size
+    override fun getItemCount() = 24
 }

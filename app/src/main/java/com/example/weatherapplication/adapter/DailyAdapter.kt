@@ -44,5 +44,5 @@ class DailyAdapter(private val weatherList: List<SavedDailyWeather>?) :
         holder.nightTemp.text = currentItem?.nightTemp?.toInt().toString().plus("°C")
     }
 
-    override fun getItemCount() = weatherList!!.size
+    override fun getItemCount() = 8
 }
