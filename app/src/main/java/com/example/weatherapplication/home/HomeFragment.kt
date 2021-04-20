@@ -78,15 +78,14 @@ class HomeFragment : Fragment() {
 
         viewModel.currentWeather.observe(viewLifecycleOwner, {
             title.text = it?.timezone ?: "wait"
-            status.text =
-                it?.weatherDescription?.get(0)?.toString()?.capitalize(Locale.ENGLISH) ?: "wait"
-            temperature.text = it?.temperature.toString().plus("°C") ?: "wait"
-            humidity.text = it?.humidity.toString().plus(" %") ?: "wait"
-            windSpeed.text = it?.windSpeed.toString().plus(" km/h") ?: "wait"
-            reelFeel.text = it?.feelsLike.toString().plus("°C") ?: "wait"
-            dewPoint.text = "Dew Point: ".plus(it?.dewPoint?.toInt()).plus("°C") ?: "wait"
-            uvIndex.text = "UV Index: ".plus(it?.uvIndex?.toInt()) ?: "wait"
-            visibility.text = "Visibility: ".plus(it?.visibility?.div(1000)).plus(" km") ?: "wait"
+            status.text = it?.weatherDescription?.capitalize(Locale.ENGLISH) ?: "wait"
+            temperature.text = it?.temperature?.toInt().toString().plus("°C")
+            humidity.text = it?.humidity.toString().plus(" %")
+            windSpeed.text = it?.windSpeed.toString().plus(" km/h")
+            reelFeel.text = it?.feelsLike?.toInt().toString().plus("°C")
+            dewPoint.text = "Dew Point: ".plus(it?.dewPoint?.toInt()).plus("°C")
+            uvIndex.text = "UV Index: ".plus(it?.uvIndex?.toInt())
+            visibility.text = "Visibility: ".plus(it?.visibility?.div(1000)).plus(" km")
             statusPicture.setImageResource(getStatusImage(it?.weatherMain))
             sunrise.text = if (it?.sunrise != null)
                 sunriseSunsetDateFormat.format(Date(it.sunrise.toString().plus("000").toLong()))
@@ -104,9 +103,9 @@ class HomeFragment : Fragment() {
         viewModel.dailyWeather.observe(viewLifecycleOwner, {
             if (it?.size != 0) {
                 rainChance.text =
-                    it?.get(0)?.probabilityOfPrecipitation?.times(100).toString().plus(" %")
+                    it?.get(0)?.probabilityOfPrecipitation?.times(100)?.toInt().toString().plus(" %")
                 precipitation.text =
-                    "Precipitation: ".plus(((it[0].snow + it[0].rain) / 2)).plus(" mm")
+                    "Precipitation: ".plus(it[0].rain).plus(" mm")
             }
         })
     }
@@ -120,14 +119,10 @@ class HomeFragment : Fragment() {
                 dailyRecycler.adapter = DailyAdapter(it)
         })
 
-//        dailyRecycler.adapter = DailyAdapter(viewModel.dailyWeather.value)
-
         viewModel.hourlyWeather.observe(viewLifecycleOwner, {
             if (it?.size != 0)
                 hourlyRecycler.adapter = HourlyAdapter(it)
         })
-
-//        hourlyRecycler.adapter = HourlyAdapter(viewModel.hourlyWeather.value)
     }
 }
 

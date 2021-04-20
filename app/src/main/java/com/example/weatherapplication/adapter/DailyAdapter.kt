@@ -5,8 +5,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
+import com.example.weatherapplication.home.HomeFragmentDirections
 import com.example.weatherapplication.home.getStatusImage
 import com.example.weatherapplication.room.entity.SavedDailyWeather
 import java.text.SimpleDateFormat
@@ -42,7 +44,31 @@ class DailyAdapter(private val weatherList: List<SavedDailyWeather>?) :
         holder.picture.setImageResource(getStatusImage(currentItem?.weatherMain))
         holder.dayTemp.text = currentItem?.dayTemp?.toInt().toString().plus("°C")
         holder.nightTemp.text = currentItem?.nightTemp?.toInt().toString().plus("°C")
+
+        holder.itemView.setOnClickListener {
+            val action = currentItem?.sunrise?.let { item ->
+                HomeFragmentDirections.homeFragmentToDetailsFragment(
+                    item,
+                    currentItem.sunset,
+                    currentItem.dayFeelsLike,
+                    currentItem.nightFeelsLike,
+                    currentItem.pressure,
+                    currentItem.humidity,
+                    currentItem.dewPoint,
+                    currentItem.uvIndex,
+                    currentItem.windSpeed,
+                    currentItem.windDirection,
+                    currentItem.probabilityOfPrecipitation,
+                    currentItem.dateTime,
+                    currentItem.weatherDescription,
+                    currentItem.dayTemp,
+                    currentItem.nightTemp,
+                    currentItem.weatherMain
+                )
+            }
+            action?.let { act -> Navigation.findNavController(holder.itemView).navigate(act) }
+        }
     }
 
-    override fun getItemCount() = 8
+    override fun getItemCount() = 7
 }
