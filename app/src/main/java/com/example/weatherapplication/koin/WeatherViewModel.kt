@@ -20,9 +20,11 @@ import retrofit2.Callback
 class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ForecastRepository
-    lateinit var currentWeather: LiveData<SavedCurrentWeather>
-    lateinit var hourlyWeather: LiveData<List<SavedHourlyWeather>>
-    lateinit var dailyWeather: LiveData<List<SavedDailyWeather>>
+    var currentWeather: LiveData<SavedCurrentWeather>
+    var hourlyWeather: LiveData<List<SavedHourlyWeather>>
+    var dailyWeather: LiveData<List<SavedDailyWeather>>
+    var latitude: Float = 53.893009F
+    var longitude: Float = 27.567444F
 
     init {
         Log.d("viewmodel", "init")
@@ -35,7 +37,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getResult() {
-        RetrofitInstance.weatherApi.getWeather(53.893009F, 27.567444F, "metric").enqueue(object :
+        RetrofitInstance.weatherApi.getWeather(latitude, longitude, "metric").enqueue(object :
             Callback<Response> {
             override fun onFailure(call: Call<Response>, t: Throwable) {
                 Log.d("viewmodel", "on failure")
