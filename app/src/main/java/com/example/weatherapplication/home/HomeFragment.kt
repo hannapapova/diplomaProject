@@ -8,12 +8,16 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.weatherapplication.*
 import com.example.weatherapplication.adapter.DailyAdapter
 import com.example.weatherapplication.adapter.HourlyAdapter
+import com.example.weatherapplication.favorites.FavoritesFragmentDirections
 import com.example.weatherapplication.koin.WeatherViewModel
+import com.example.weatherapplication.model.cities.Geoname
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -21,6 +25,7 @@ import java.util.*
 class HomeFragment : Fragment() {
     private val key = "HOME"
     private val viewModel by inject<WeatherViewModel>()
+    private val args: HomeFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,13 +37,37 @@ class HomeFragment : Fragment() {
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val window = requireActivity().window
 
-        viewModel.getResult()
+        viewModel.getResult(
+            Geoname(
+                args.adminName1,
+                args.countryName,
+                args.latitude,
+                args.longitude,
+                args.name
+            )
+        )
         setupTitle(title, key)
         setupToolBarBackgroundColor(toolbar, requireContext())
         setupBackgroundColor(view)
         setupStatusBarColor(window, requireContext())
         setupBar(key, toolbar)
-        setupBarActions(key, view, toolbar)
+//        setupBarActions(key, view, toolbar)
+
+        toolbar?.setNavigationOnClickListener {
+            val action = HomeFragmentDirections.homeFragmentToFavoritesFragment(
+                name = args.name,
+                adminName1 = args.adminName1,
+                countryName = args.countryName,
+                latitude = args.latitude,
+                longitude = args.longitude
+            )
+            Navigation.findNavController(view).navigate(action)
+        }
+        toolbar?.setOnMenuItemClickListener {
+            Navigation.findNavController(view)
+                .navigate(R.id.homeFragment_to_settingsFragment)
+            true
+        }
 
         return view
     }
@@ -51,7 +80,15 @@ class HomeFragment : Fragment() {
         setupRecyclers()
 
         refreshLayout.setOnRefreshListener {
-            viewModel.getResult()
+            viewModel.getResult(
+                Geoname(
+                    args.adminName1,
+                    args.countryName,
+                    args.latitude,
+                    args.longitude,
+                    args.name
+                )
+            )
             refreshLayout.isRefreshing = false
         }
     }

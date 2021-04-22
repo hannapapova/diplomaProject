@@ -8,14 +8,21 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import com.example.weatherapplication.*
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.navArgs
+import com.example.weatherapplication.R
 import com.example.weatherapplication.koin.WeatherViewModel
+import com.example.weatherapplication.model.cities.Geoname
+import com.example.weatherapplication.setupBackgroundColor
+import com.example.weatherapplication.setupBar
+import com.example.weatherapplication.setupTitle
 import kotlinx.android.synthetic.main.fragment_favorites.*
 import org.koin.android.ext.android.inject
 
 class FavoritesFragment : Fragment() {
     private val key = "FAVORITES"
     private val viewModel by inject<WeatherViewModel>()
+    private val args: FavoritesFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +36,23 @@ class FavoritesFragment : Fragment() {
         setupTitle(title, key)
         setupBackgroundColor(view)
         setupBar(key, toolbar)
-        setupBarActions(key, view, toolbar)
+//        setupBarActions(key, view, toolbar)
+
+        toolbar?.setNavigationOnClickListener {
+            val action = FavoritesFragmentDirections.actionFavoritesFragmentToHomeFragment(
+                name = args.name,
+                adminName1 = args.adminName1,
+                countryName = args.countryName,
+                latitude = args.latitude,
+                longitude = args.longitude
+            )
+            Navigation.findNavController(view).navigate(action)
+        }
+        toolbar?.setOnMenuItemClickListener {
+            Navigation.findNavController(view)
+                .navigate(R.id.favoritesFragment_to_searchFragment)
+            true
+        }
 
         return view
     }
@@ -37,7 +60,15 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getResult()
+        viewModel.getResult(
+            Geoname(
+                args.adminName1,
+                args.countryName,
+                args.latitude,
+                args.longitude,
+                args.name
+            )
+        )
 
         Log.d("viewmodel", "onViewCreated")
 

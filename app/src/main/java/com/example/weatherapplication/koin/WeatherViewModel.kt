@@ -49,25 +49,27 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         dailyWeather = repository.savedDailyWeather
     }
 
-    fun newCoord() {
+    fun newCoord(geoname: Geoname) {
         Log.d("viewmodel", "in newCoord")
 
 //            getCitiesResult()
 
             Log.d("viewmodel", cities.value?.get(0).toString())
 
-            latitude = cities.value?.get(0)?.latitude?.toFloat() ?: 53.893009F
-            longitude = cities.value?.get(0)?.longitude?.toFloat() ?: 27.567444F
+//            latitude = cities.value?.get(0)?.latitude?.toFloat() ?: 53.893009F
+//            longitude = cities.value?.get(0)?.longitude?.toFloat() ?: 27.567444F
 
+        latitude = geoname.latitude.toFloat()
+        longitude = geoname.longitude.toFloat()
 
         Log.d("viewmodel", "lat = $latitude, lon = $longitude")
     }
 
-    fun getResult() {
+    fun getResult(geoname: Geoname) {
 //        Log.d("viewmodel", "get result")
-        newCoord()
+        newCoord(geoname)
 
-        RetrofitInstance.weatherApi.getWeather(latitude.toFloat(), longitude.toFloat(), "metric")
+        RetrofitInstance.weatherApi.getWeather(latitude, longitude, "metric")
             .enqueue(object :
                 Callback<Response> {
                 // Network Errors here

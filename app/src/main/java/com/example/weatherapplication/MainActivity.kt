@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.LocationManager
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -12,6 +11,7 @@ import android.view.View
 import android.view.Window
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -170,7 +170,9 @@ internal fun setupBarActions(key: String, view: View, toolbar: Toolbar?) {
         }
         "FAVORITES" -> {
             toolbar?.setNavigationOnClickListener {
-                Navigation.findNavController(view).popBackStack()
+//                Navigation.findNavController(view).popBackStack()
+                Navigation.findNavController(view)
+                    .navigate(R.id.action_favoritesFragment_to_homeFragment)
             }
             toolbar?.setOnMenuItemClickListener {
                 Navigation.findNavController(view)
