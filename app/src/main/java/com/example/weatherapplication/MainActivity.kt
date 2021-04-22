@@ -146,7 +146,6 @@ internal fun setupBar(key: String, toolbar: Toolbar?) {
         "SETTINGS" -> {
             addBackButton(toolbar)
             toolbar?.menu?.findItem(R.id.action)?.isVisible = true
-            toolbar?.menu?.findItem(R.id.action)?.setIcon(R.drawable.save_24)
         }
     }
 }
@@ -191,10 +190,6 @@ internal fun setupBarActions(key: String, view: View, toolbar: Toolbar?) {
         "SETTINGS" -> {
             toolbar?.setNavigationOnClickListener {
                 Navigation.findNavController(view).popBackStack()
-            }
-            toolbar?.setOnMenuItemClickListener {
-                //TODO Save settings
-                true
             }
         }
     }
