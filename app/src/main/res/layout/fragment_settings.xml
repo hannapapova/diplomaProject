@@ -32,20 +32,20 @@
                 android:textColor="@color/white" />
 
             <RadioButton
-                android:layout_marginTop="@dimen/margin_settings_buttons"
-                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:id="@+id/fahrenheit"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="Fahrenheit °F"
                 android:textColor="@color/white" />
 
             <RadioButton
                 android:id="@+id/kelvin"
-                android:layout_marginTop="@dimen/margin_settings_buttons"
-                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="Kelvin K"
                 android:textColor="@color/white" />
         </RadioGroup>
@@ -83,9 +83,9 @@
             <RadioButton
                 android:id="@+id/speed_mph"
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/margin_settings_buttons"
                 android:layout_marginBottom="@dimen/margin_settings_buttons"
-                android:layout_height="match_parent"
                 android:text="Mph"
                 android:textColor="@color/white" />
         </RadioGroup>
@@ -112,11 +112,10 @@
                 android:textColor="@color/white" />
 
             <RadioButton
-                android:id="@+id/atm_hPa"
-                android:layout_marginTop="@dimen/margin_settings_buttons"
-                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/margin_settings_buttons"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="hPa"
                 android:textColor="@color/white" />
         </RadioGroup>

@@ -1,8 +1,284 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".details.DetailsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/date_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="April 2023"
+            android:textColor="@color/second_main_color"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/status_picture_details"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/mostly_sunny"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/date_details" />
+
+        <TextView
+            android:id="@+id/status_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Mostly Sunny"
+            android:textColor="@color/white"
+            android:textSize="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/status_picture_details"
+            app:layout_constraintTop_toBottomOf="@id/date_details" />
+
+        <TextView
+            android:id="@+id/day_temp_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Day temperature"
+            android:textColor="@color/second_main_color"
+            app:layout_constraintEnd_toStartOf="@+id/night_temp_details"
+            app:layout_constraintStart_toEndOf="@id/status_picture_details"
+            app:layout_constraintTop_toBottomOf="@id/status_details" />
+
+        <TextView
+            android:id="@+id/night_temp_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Night temperature"
+            android:textColor="@color/second_main_color"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/day_temp_details"
+            app:layout_constraintTop_toBottomOf="@+id/status_details" />
+
+        <TextView
+            android:id="@+id/current_day_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-thin"
+            android:text="-5°C"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toStartOf="@+id/current_night_temp"
+            app:layout_constraintStart_toEndOf="@id/status_picture_details"
+            app:layout_constraintTop_toBottomOf="@id/day_temp_details" />
+
+        <TextView
+            android:id="@+id/current_night_temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-thin"
+            android:text="-6°C"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/current_day_temp"
+            app:layout_constraintTop_toBottomOf="@id/night_temp_details" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/main_info_barrier_daily"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="current_day_temp, current_night_temp, night_temp_details, day_temp_details,status_details,status_picture_details,date_details" />
+
+        <LinearLayout
+            android:id="@+id/linear_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/round_bg"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/main_info_barrier_daily">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sunrise:"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sunset:"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Feels like (Day):"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Feels like (Night):"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pressure:"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Humidity:"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dew Point:"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="UV Index:"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wind speed:"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Wind direction:"
+                    android:textColor="@color/second_main_color" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Probability of Precipitation:"
+                    android:textColor="@color/second_main_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/sunrise_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="02:00"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/sunset_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="20:00"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/feelslike_day_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="20°C"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/feelslike_night_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="10°C"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/pressure_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1019"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/humidity_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="42%"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/dew_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="2°C"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/uv_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="4"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/wind_speed_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1 km/h"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/wind_direction_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="20°"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/precipitation_field"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="1mm"
+                    android:textColor="@color/white" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.core.widget.NestedScrollView>
