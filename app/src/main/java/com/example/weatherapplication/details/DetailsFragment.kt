@@ -73,14 +73,28 @@ class DetailsFragment : Fragment() {
                 sunriseSunsetFormat.format(Date(args.sunset.toString().plus("000").toLong()))
             feelsLikeDay.text = this.feelslikeDay.toInt().toString().plus("°C")
             feelsLikeNight.text = this.feelslikeNight.toInt().toString().plus("°C")
-            pressure.text = this.pressure.toString()
+            pressure.text = this.pressure.toString().plus(" hPa")
             humidity.text = this.humidity.toString().plus(" %")
             dewPoint.text = this.dewPoint.toInt().toString().plus("°C")
             uvIndex.text = this.uvIndex.toInt().toString()
             windSpeed.text = this.windSpeed.toString().plus(" km/h")
-            windDirection.text = this.windDirection.toString()
+            windDirection.text = setupWindDirection(this.windDirection)
             probabilityOfPrecipitation.text =
-                this.propabilityOfPrecipitation.times(100).toInt().toString()
+                this.propabilityOfPrecipitation.times(100).toInt().toString().plus(" %")
+        }
+    }
+
+    private fun setupWindDirection(windDirection: Int): String {
+        return when (windDirection) {
+            in 338..360, in 0..22 -> "North"
+            in 293..337 -> "North - West"
+            in 248..292 -> "West"
+            in 203..247 -> "South - West"
+            in 158..202 -> "South"
+            in 113..157 -> "South - East"
+            in 68..112 -> "East"
+            in 23..67 -> "North - East"
+            else -> "Null"
         }
     }
 }
