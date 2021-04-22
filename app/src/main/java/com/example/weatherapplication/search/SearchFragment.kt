@@ -8,13 +8,18 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
+import com.example.weatherapplication.koin.WeatherViewModel
 import com.example.weatherapplication.setupBackgroundColor
 import com.example.weatherapplication.setupBar
 import com.example.weatherapplication.setupBarActions
 import com.example.weatherapplication.setupTitle
+import kotlinx.android.synthetic.main.fragment_search.*
+import okhttp3.internal.notifyAll
+import org.koin.android.ext.android.inject
 
 class SearchFragment : Fragment() {
     private val key = "SEARCH"
+    private val viewModel by inject<WeatherViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,5 +36,19 @@ class SearchFragment : Fragment() {
         setupBarActions(key, view, toolbar)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel.cities.observe(viewLifecycleOwner, {
+            tv_result.text = it.toString()
+        })
+
+        btn_go.setOnClickListener {
+            viewModel.getCitiesResult(et_search.text.toString())
+//            viewModel.newCoord()
+//            viewModel.getResult()
+        }
     }
 }

@@ -27,7 +27,6 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var hourlyWeather: LiveData<List<SavedHourlyWeather>>
     var dailyWeather: LiveData<List<SavedDailyWeather>>
     var cities = MutableLiveData<List<Geoname>>()
-    var citiesList = mutableListOf<Geoname>()
     var latitude: Float = 53.893009F
     var longitude: Float = 27.567444F
 
@@ -50,19 +49,6 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         dailyWeather = repository.savedDailyWeather
     }
 
-    fun result() {
-        getCitiesResult()
-
-        Log.d("viewmodel", cities.value?.get(0).toString())
-
-        latitude = cities.value?.get(0)?.latitude?.toFloat() ?: 53.893009F
-        longitude = cities.value?.get(0)?.longitude?.toFloat() ?: 27.567444F
-
-        Log.d("viewmodel", "lat = $latitude, lon = $longitude")
-
-        getResult()
-    }
-
     fun newCoord() {
         Log.d("viewmodel", "in newCoord")
 
@@ -79,6 +65,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
     fun getResult() {
 //        Log.d("viewmodel", "get result")
+        newCoord()
+
         RetrofitInstance.weatherApi.getWeather(latitude.toFloat(), longitude.toFloat(), "metric")
             .enqueue(object :
                 Callback<Response> {
@@ -103,6 +91,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                         deleteDailyWeatherTable()
 
                         val newCurrentWeather = SavedCurrentWeather(
+                            responseBody.timezone,
                             responseBody.current.dateTime,
                             responseBody.current.sunrise,
                             responseBody.current.sunset,
@@ -181,10 +170,10 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
             })
     }
 
-    fun getCitiesResult() {
+    fun getCitiesResult(cityName: String) {
         Log.d("viewmodel", "getCitiesResult")
 
-        RetrofitInstance.cityApi.getCities("cairo").enqueue(object : Callback<ResponseCity> {
+        RetrofitInstance.cityApi.getCities(cityName).enqueue(object : Callback<ResponseCity> {
             override fun onFailure(call: Call<ResponseCity>, t: Throwable) {
                 Log.d("viewmodel", t.message.toString())
             }
@@ -196,16 +185,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                 if (response.isSuccessful) {
 //                    Log.d("viewmodel", "on response")
                     val responseBody: ResponseCity = response.body()!!
-                    Log.d("viewmodel", "блять где я")
 
-                    Log.d("viewmodel", citiesList.toString())
-                    citiesList.clear()
-                    for(city in responseBody.geonames){
-                        citiesList.add(city)
-                    }
                     cities.value = responseBody.geonames
-
-                    Log.d("viewmodel", citiesList.toString())
 
                     Log.d("viewmodel", "in getCitiesResult")
                     Log.d("viewmodel", cities.value?.get(0).toString())

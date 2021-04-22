@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.weatherapplication.*
 import com.example.weatherapplication.koin.WeatherViewModel
 import kotlinx.android.synthetic.main.fragment_favorites.*
@@ -38,28 +37,16 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d("viewmodel", "in fragment, getting cities")
-        viewModel.getCitiesResult()
+        viewModel.getResult()
 
-//        Log.d("viewmodel", "in fragment, getting result")
-//        viewModel.getResult()
+        Log.d("viewmodel", "onViewCreated")
 
-        viewModel.cities.observe(viewLifecycleOwner, Observer {
-//            tv_hourly.text = it?.get(0).toString() ?: "wait"
-            btn_city.text = it[0].name
+        viewModel.cities.observe(viewLifecycleOwner, {
+            tv_city.text = it.toString()
         })
 
-        viewModel.currentWeather.observe(viewLifecycleOwner, Observer {
+        viewModel.currentWeather.observe(viewLifecycleOwner, {
             tv_current.text = it?.toString() ?: "wait"
         })
-
-        btn_city.setOnClickListener {
-            Log.d("viewmodel", "in fragment, getting coords")
-            viewModel.newCoord()
-
-            Log.d("viewmodel", "in fragment, getting result")
-            viewModel.getResult()
-        }
-
     }
 }
