@@ -11,6 +11,6 @@ interface CityApi {
         @Query("name_startsWith")
         query: String,
         @Query("lang")
-        language: String = "ru"
+        language: String = "en"
     ): Call<ResponseCity>
 }

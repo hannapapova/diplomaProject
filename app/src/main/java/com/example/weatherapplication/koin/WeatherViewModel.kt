@@ -23,32 +23,62 @@ import retrofit2.Callback
 class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: ForecastRepository
-    lateinit var currentWeather: LiveData<SavedCurrentWeather>
-    lateinit var hourlyWeather: LiveData<List<SavedHourlyWeather>>
-    lateinit var dailyWeather: LiveData<List<SavedDailyWeather>>
+    var currentWeather: LiveData<SavedCurrentWeather>
+    var hourlyWeather: LiveData<List<SavedHourlyWeather>>
+    var dailyWeather: LiveData<List<SavedDailyWeather>>
     var cities = MutableLiveData<List<Geoname>>()
-    private lateinit var latitude: String
-    private lateinit var longitude: String
+    var citiesList = mutableListOf<Geoname>()
+    var latitude: Float = 53.893009F
+    var longitude: Float = 27.567444F
 
     init {
         Log.d("viewmodel", "init")
         val forecastDao = ForecastDatabase.getDatabase(application).forecastDao()
         repository = ForecastRepository(forecastDao)
 
+//        getCitiesResult()
+//
+//        latitude = cities.value?.get(0)?.latitude?.toFloat() ?: 53.893009F
+//        longitude = cities.value?.get(0)?.longitude?.toFloat() ?: 27.567444F
+//
+//        Log.d("viewmodel", "lat = $latitude, lon = $longitude")
+//
+//        getResult()
+
+        currentWeather = repository.savedCurrentWeather
+        hourlyWeather = repository.savedHourlyWeather
+        dailyWeather = repository.savedDailyWeather
+    }
+
+    fun result() {
         getCitiesResult()
 
-        latitude = cities.value!![0].latitude
-        longitude = cities.value!![0].longitude
+        Log.d("viewmodel", cities.value?.get(0).toString())
 
-//        getResult()
-//
-//        currentWeather = repository.savedCurrentWeather
-//        hourlyWeather = repository.savedHourlyWeather
-//        dailyWeather = repository.savedDailyWeather
+        latitude = cities.value?.get(0)?.latitude?.toFloat() ?: 53.893009F
+        longitude = cities.value?.get(0)?.longitude?.toFloat() ?: 27.567444F
+
+        Log.d("viewmodel", "lat = $latitude, lon = $longitude")
+
+        getResult()
+    }
+
+    fun newCoord() {
+        Log.d("viewmodel", "in newCoord")
+
+//            getCitiesResult()
+
+            Log.d("viewmodel", citiesList.toString())
+
+            latitude = citiesList[0].latitude.toFloat() ?: 53.893009F
+            longitude = citiesList[0].longitude.toFloat() ?: 27.567444F
+
+
+        Log.d("viewmodel", "lat = $latitude, lon = $longitude")
     }
 
     fun getResult() {
-        Log.d("viewmodel", "get result")
+//        Log.d("viewmodel", "get result")
         RetrofitInstance.weatherApi.getWeather(latitude.toFloat(), longitude.toFloat(), "metric")
             .enqueue(object :
                 Callback<Response> {
@@ -63,9 +93,9 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                     response: retrofit2.Response<Response>
                 ) {
                     if (response.isSuccessful) {
-                        Log.d("viewmodel", "on response")
+//                        Log.d("viewmodel", "on response")
                         val responseBody: Response = response.body()!!
-                        Log.d("viewmodel", responseBody.toString())
+//                        Log.d("viewmodel", responseBody.toString())
 
                         //region Refresh forecast database
                         deleteCurrentWeatherTable()
@@ -152,7 +182,9 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getCitiesResult() {
-        RetrofitInstance.cityApi.getCities("фаниполь").enqueue(object : Callback<ResponseCity> {
+        Log.d("viewmodel", "getCitiesResult")
+
+        RetrofitInstance.cityApi.getCities("cairo").enqueue(object : Callback<ResponseCity> {
             override fun onFailure(call: Call<ResponseCity>, t: Throwable) {
                 Log.d("viewmodel", t.message.toString())
             }
@@ -162,14 +194,21 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                 response: retrofit2.Response<ResponseCity>
             ) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "on response")
+//                    Log.d("viewmodel", "on response")
                     val responseBody: ResponseCity = response.body()!!
-                    Log.d("viewmodel", responseBody.toString())
+                    Log.d("viewmodel", "блять где я")
 
-                    cities.value = responseBody.geonames
+                    Log.d("viewmodel", citiesList.toString())
+                    citiesList.clear()
+                    for(city in responseBody.geonames){
+                        citiesList.add(city)
+                    }
+                    cities.value = citiesList
 
-                    Log.d("viewmodel", "__________________")
-                    Log.d("viewmodel", cities.value.toString())
+                    Log.d("viewmodel", citiesList.toString())
+
+                    Log.d("viewmodel", "in getCitiesResult")
+                    Log.d("viewmodel", cities.value?.get(0).toString())
 
                 } else {
                     Log.d("viewmodel", "on response, but not successful")

@@ -1,6 +1,7 @@
 package com.example.weatherapplication.favorites
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,14 +38,28 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getResult()
+        Log.d("viewmodel", "in fragment, getting cities")
+        viewModel.getCitiesResult()
+
+//        Log.d("viewmodel", "in fragment, getting result")
+//        viewModel.getResult()
 
         viewModel.cities.observe(viewLifecycleOwner, Observer {
+//            tv_hourly.text = it?.get(0).toString() ?: "wait"
+            btn_city.text = it[0].name
+        })
+
+        viewModel.currentWeather.observe(viewLifecycleOwner, Observer {
             tv_current.text = it?.toString() ?: "wait"
         })
 
-        viewModel.currentWeather.observe(viewLifecycleOwner, Observer{
-            tv_hourly.text = it?.toString() ?: "wait"
-        })
+        btn_city.setOnClickListener {
+            Log.d("viewmodel", "in fragment, getting coords")
+            viewModel.newCoord()
+
+            Log.d("viewmodel", "in fragment, getting result")
+            viewModel.getResult()
+        }
+
     }
 }
