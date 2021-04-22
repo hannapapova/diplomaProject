@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "current_weather_table")
 data class SavedCurrentWeather(
     @PrimaryKey
+    val timezone: String,
     val dateTime: Int,
     val sunrise: Int,
     val sunset: Int,

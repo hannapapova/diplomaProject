@@ -23,6 +23,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var currentWeather: LiveData<SavedCurrentWeather>
     var hourlyWeather: LiveData<List<SavedHourlyWeather>>
     var dailyWeather: LiveData<List<SavedDailyWeather>>
+    var latitude: Float = 53.893009F
+    var longitude: Float = 27.567444F
 
     init {
         Log.d("viewmodel", "init")
@@ -35,10 +37,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getResult() {
-        Log.d("viewmodel", "get result")
-        RetrofitInstance.weatherApi.getWeather(53.893009F, 27.567444F, "metric").enqueue(object :
+        RetrofitInstance.weatherApi.getWeather(latitude, longitude, "metric").enqueue(object :
             Callback<Response> {
-            // Network Errors here
             override fun onFailure(call: Call<Response>, t: Throwable) {
                 Log.d("viewmodel", "on failure")
                 Log.d("viewmodel", t.message.toString())
@@ -46,15 +46,14 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
             override fun onResponse(call: Call<Response>, response: retrofit2.Response<Response>) {
                 if (response.isSuccessful) {
-                    Log.d("viewmodel", "on response")
                     val responseBody: Response = response.body()!!
-                    Log.d("viewmodel", responseBody.toString())
 
                     deleteCurrentWeatherTable()
                     deleteHourlyWeatherTable()
                     deleteDailyWeatherTable()
 
                     val newCurrentWeather = SavedCurrentWeather(
+                        responseBody.timezone,
                         responseBody.current.dateTime,
                         responseBody.current.sunrise,
                         responseBody.current.sunset,

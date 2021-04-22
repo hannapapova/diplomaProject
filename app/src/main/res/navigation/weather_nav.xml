@@ -47,5 +47,54 @@
         android:id="@+id/detailsFragment"
         android:name="com.example.weatherapplication.details.DetailsFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="sunrise"
+            app:argType="integer" />
+        <argument
+            android:name="sunset"
+            app:argType="integer" />
+        <argument
+            android:name="feelslikeDay"
+            app:argType="float" />
+        <argument
+            android:name="feelslikeNight"
+            app:argType="float" />
+        <argument
+            android:name="pressure"
+            app:argType="integer" />
+        <argument
+            android:name="humidity"
+            app:argType="integer" />
+        <argument
+            android:name="dewPoint"
+            app:argType="float" />
+        <argument
+            android:name="uvIndex"
+            app:argType="float" />
+        <argument
+            android:name="windSpeed"
+            app:argType="float" />
+        <argument
+            android:name="windDirection"
+            app:argType="integer" />
+        <argument
+            android:name="propabilityOfPrecipitation"
+            app:argType="float" />
+        <argument
+            android:name="date"
+            app:argType="integer" />
+        <argument
+            android:name="status"
+            app:argType="string" />
+        <argument
+            android:name="tempDay"
+            app:argType="float" />
+        <argument
+            android:name="tempNight"
+            app:argType="float" />
+        <argument
+            android:name="main"
+            app:argType="string" />
+    </fragment>
 </navigation>

@@ -12,7 +12,7 @@ import com.example.weatherapplication.room.entity.SavedHourlyWeather
 
 @Database(
     entities = [SavedCurrentWeather::class, SavedHourlyWeather::class, SavedDailyWeather::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class ForecastDatabase : RoomDatabase() {
