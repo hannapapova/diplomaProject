@@ -1,5 +1,6 @@
 package com.example.weatherapplication.api
 
+import com.example.weatherapplication.api.forecast.WeatherApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
