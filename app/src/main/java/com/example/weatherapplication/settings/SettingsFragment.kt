@@ -28,7 +28,6 @@ class SettingsFragment : Fragment() {
     private lateinit var windScales: RadioGroup
     private lateinit var pressureScales: RadioGroup
     private lateinit var visibilityScales: RadioGroup
-    private lateinit var timeScales: RadioGroup
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,7 +57,6 @@ class SettingsFragment : Fragment() {
         windScales.check(sharedPreferences.getInt("WIND_SCALE", R.id.speed_km_h))
         pressureScales.check(sharedPreferences.getInt("PRESSURE_SCALE", R.id.atm_hPa))
         visibilityScales.check(sharedPreferences.getInt("VISIBILITY_SCALE", R.id.visibility_km))
-        timeScales.check(sharedPreferences.getInt("TIME_SCALE", R.id.time_military))
     }
 
     private fun setupCheckedChangeListeners() {
@@ -78,10 +76,6 @@ class SettingsFragment : Fragment() {
         visibilityScales.setOnCheckedChangeListener { _, checkedId ->
             editor.putInt("VISIBILITY_SCALE", checkedId).apply()
         }
-
-        timeScales.setOnCheckedChangeListener { _, checkedId ->
-            editor.putInt("TIME_SCALE", checkedId).apply()
-        }
     }
 
     private fun setupLateInitValues() {
@@ -89,7 +83,6 @@ class SettingsFragment : Fragment() {
         windScales = requireActivity().findViewById(R.id.wind_scales)
         pressureScales = requireActivity().findViewById(R.id.pressure_scales)
         visibilityScales = requireActivity().findViewById(R.id.visibility_scales)
-        timeScales = requireActivity().findViewById(R.id.time_scales)
         myApplication = requireActivity().application
 
         sharedPreferences = myApplication.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)

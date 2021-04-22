@@ -1,5 +1,6 @@
 package com.example.weatherapplication.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
+import com.example.weatherapplication.home.convertTemperature
 import com.example.weatherapplication.home.getStatusImage
 import com.example.weatherapplication.room.entity.SavedHourlyWeather
 import java.text.SimpleDateFormat
@@ -28,13 +30,18 @@ class HourlyAdapter(private val weatherList: List<SavedHourlyWeather>?) :
     }
 
     override fun onBindViewHolder(holder: HourlyViewHolder, position: Int) {
+        val sharedPreferences =
+            holder.itemView.context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
         val currentItem = weatherList?.get(position)
         val timeFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
         val time = Date(currentItem?.dateTime.toString().plus("000").toLong())
 
         holder.time.text = timeFormat.format(time)
         holder.picture.setImageResource(getStatusImage(currentItem?.weatherMain))
-        holder.temperature.text = currentItem?.temperature?.toInt().toString().plus("°C")
+        holder.temperature.text = convertTemperature(
+            currentItem?.temperature,
+            sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius)
+        )
     }
 
     override fun getItemCount() = 24
