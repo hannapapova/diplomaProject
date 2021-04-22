@@ -68,10 +68,10 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 
 //            getCitiesResult()
 
-            Log.d("viewmodel", citiesList.toString())
+            Log.d("viewmodel", cities.value?.get(0).toString())
 
-            latitude = citiesList[0].latitude.toFloat() ?: 53.893009F
-            longitude = citiesList[0].longitude.toFloat() ?: 27.567444F
+            latitude = cities.value?.get(0)?.latitude?.toFloat() ?: 53.893009F
+            longitude = cities.value?.get(0)?.longitude?.toFloat() ?: 27.567444F
 
 
         Log.d("viewmodel", "lat = $latitude, lon = $longitude")
@@ -203,7 +203,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                     for(city in responseBody.geonames){
                         citiesList.add(city)
                     }
-                    cities.value = citiesList
+                    cities.value = responseBody.geonames
 
                     Log.d("viewmodel", citiesList.toString())
 
