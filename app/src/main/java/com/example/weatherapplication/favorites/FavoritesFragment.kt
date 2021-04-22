@@ -42,7 +42,7 @@ class FavoritesFragment : Fragment() {
         Log.d("viewmodel", "onViewCreated")
 
         viewModel.cities.observe(viewLifecycleOwner, {
-            tv_city.text = it.toString()
+            tv_city_favourites.text = it.toString()
         })
 
         viewModel.currentWeather.observe(viewLifecycleOwner, {

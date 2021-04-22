@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
+import com.example.weatherapplication.adapter.CitiesAdapter
 import com.example.weatherapplication.koin.WeatherViewModel
 import com.example.weatherapplication.setupBackgroundColor
 import com.example.weatherapplication.setupBar
@@ -42,7 +43,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.cities.observe(viewLifecycleOwner, {
-            tv_result.text = it.toString()
+            recycler_cities.adapter = CitiesAdapter(it)
         })
 
         btn_go.setOnClickListener {
