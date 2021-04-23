@@ -1,5 +1,6 @@
 package com.example.weatherapplication.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
 import com.example.weatherapplication.home.HomeFragmentDirections
+import com.example.weatherapplication.home.convertTemperature
 import com.example.weatherapplication.home.getStatusImage
 import com.example.weatherapplication.room.entity.SavedDailyWeather
 import java.text.SimpleDateFormat
@@ -33,6 +35,8 @@ class DailyAdapter(private val weatherList: List<SavedDailyWeather>?) :
     }
 
     override fun onBindViewHolder(holder: DailyViewHolder, position: Int) {
+        val sharedPreferences =
+            holder.itemView.context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
         val currentItem = weatherList?.get(position)
         val dataMonthFormat = SimpleDateFormat("MMMM dd", Locale.ENGLISH)
         val dataDayFormat = SimpleDateFormat("EEEE", Locale.ENGLISH)
@@ -42,8 +46,14 @@ class DailyAdapter(private val weatherList: List<SavedDailyWeather>?) :
         holder.date.text = dataMonthFormat.format(currentMonth)
         holder.day.text = dataDayFormat.format(currentDay)
         holder.picture.setImageResource(getStatusImage(currentItem?.weatherMain))
-        holder.dayTemp.text = currentItem?.dayTemp?.toInt().toString().plus("°C")
-        holder.nightTemp.text = currentItem?.nightTemp?.toInt().toString().plus("°C")
+        holder.dayTemp.text = convertTemperature(
+            currentItem?.dayTemp,
+            sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius)
+        )
+        holder.nightTemp.text = convertTemperature(
+            currentItem?.nightTemp,
+            sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius)
+        )
 
         holder.itemView.setOnClickListener {
             val action = currentItem?.sunrise?.let { item ->
