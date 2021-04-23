@@ -191,7 +191,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                     cities.value = responseBody.geonames
 
                     Log.d("viewmodel", "in getCitiesResult")
-                    Log.d("viewmodel", cities.value?.get(0).toString())
+//                    Log.d("viewmodel", cities.value?.get(0).toString())
 
                 } else {
                     Log.d("viewmodel", "on response, but not successful")

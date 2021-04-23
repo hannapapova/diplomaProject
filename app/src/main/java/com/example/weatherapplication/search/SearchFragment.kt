@@ -1,22 +1,22 @@
 package com.example.weatherapplication.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
 import com.example.weatherapplication.adapter.CitiesAdapter
 import com.example.weatherapplication.koin.WeatherViewModel
-import com.example.weatherapplication.setupBackgroundColor
-import com.example.weatherapplication.setupBar
-import com.example.weatherapplication.setupBarActions
-import com.example.weatherapplication.setupTitle
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.core.ObservableOnSubscribe
 import kotlinx.android.synthetic.main.fragment_search.*
-import okhttp3.internal.notifyAll
 import org.koin.android.ext.android.inject
+import java.util.concurrent.TimeUnit
 
 class SearchFragment : Fragment() {
     private val key = "SEARCH"
@@ -46,10 +46,31 @@ class SearchFragment : Fragment() {
             recycler_cities.adapter = CitiesAdapter(it)
         })
 
-        btn_go.setOnClickListener {
-            viewModel.getCitiesResult(et_search.text.toString())
-//            viewModel.newCoord()
-//            viewModel.getResult()
-        }
+        Observable.create(ObservableOnSubscribe<String> { subscriber ->
+            sv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    subscriber.onNext(query)
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    subscriber.onNext(newText)
+                    return false
+                }
+            })
+        }).map { text -> text.trim() }
+            .debounce(250, TimeUnit.MILLISECONDS)
+            .distinctUntilChanged()
+            .filter { text -> text.isNotBlank() }
+            .subscribe { text ->
+                Log.d("viewmodel", "subscriber: $text")
+                viewModel.getCitiesResult(text)
+            }
+
+//        btn_go.setOnClickListener {
+//            viewModel.getCitiesResult(et_search.text.toString())
+////            viewModel.newCoord()
+////            viewModel.getResult()
+//        }
     }
 }
