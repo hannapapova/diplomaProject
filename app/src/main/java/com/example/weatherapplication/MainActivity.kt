@@ -1,7 +1,9 @@
 package com.example.weatherapplication
 
 import android.Manifest
+import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +26,8 @@ import org.koin.android.ext.android.inject
 class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var myApplication: Application
     private var PERMISSION_ID = 322
     private val viewModel by inject<WeatherViewModel>()
 
@@ -31,8 +35,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         setContentView(R.layout.activity_main)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        getLastLocation()
+        myApplication = application
+        sharedPreferences = myApplication.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
+
+        if (sharedPreferences.getBoolean("LOCATION", true)) {
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+            getLastLocation()
+        }
 
     }
 
@@ -146,7 +155,6 @@ internal fun setupBar(key: String, toolbar: Toolbar?) {
         "SETTINGS" -> {
             addBackButton(toolbar)
             toolbar?.menu?.findItem(R.id.action)?.isVisible = true
-            toolbar?.menu?.findItem(R.id.action)?.setIcon(R.drawable.save_24)
         }
     }
 }
@@ -191,10 +199,6 @@ internal fun setupBarActions(key: String, view: View, toolbar: Toolbar?) {
         "SETTINGS" -> {
             toolbar?.setNavigationOnClickListener {
                 Navigation.findNavController(view).popBackStack()
-            }
-            toolbar?.setOnMenuItemClickListener {
-                //TODO Save settings
-                true
             }
         }
     }

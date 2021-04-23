@@ -1,5 +1,8 @@
 package com.example.weatherapplication.details
 
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +13,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.weatherapplication.*
+import com.example.weatherapplication.home.convertPressure
+import com.example.weatherapplication.home.convertTemperature
+import com.example.weatherapplication.home.convertWindSpeed
 import com.example.weatherapplication.home.getStatusImage
 import com.example.weatherapplication.setupBackgroundColor
 import com.example.weatherapplication.setupBar
@@ -21,6 +27,8 @@ import java.util.*
 class DetailsFragment : Fragment() {
     private val key = "DETAILS"
     private val args: DetailsFragmentArgs by navArgs()
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var myApplication: Application
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +48,8 @@ class DetailsFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        myApplication = requireActivity().application
+        sharedPreferences = myApplication.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
         val statusPicture = requireActivity().findViewById<ImageView>(R.id.status_picture_details)
         val status = requireActivity().findViewById<TextView>(R.id.status_details)
         val data = requireActivity().findViewById<TextView>(R.id.date_details)
@@ -65,19 +75,28 @@ class DetailsFragment : Fragment() {
             statusPicture.setImageResource(getStatusImage(this.main))
             status.text = this.status.capitalize(Locale.ENGLISH)
             data.text = mainDateFormatter.format(Date(args.date.toString().plus("000").toLong()))
-            dayTemperature.text = this.tempDay.toInt().toString().plus("°C")
-            nightTemperature.text = this.tempNight.toInt().toString().plus("°C")
+            dayTemperature.text = convertTemperature(this.tempDay, sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius))
+            nightTemperature.text = convertTemperature(this.tempNight, sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius))
             sunrise.text =
                 sunriseSunsetFormat.format(Date(args.sunrise.toString().plus("000").toLong()))
             sunset.text =
                 sunriseSunsetFormat.format(Date(args.sunset.toString().plus("000").toLong()))
-            feelsLikeDay.text = this.feelslikeDay.toInt().toString().plus("°C")
-            feelsLikeNight.text = this.feelslikeNight.toInt().toString().plus("°C")
-            pressure.text = this.pressure.toString().plus(" hPa")
+            feelsLikeDay.text = convertTemperature(this.feelslikeDay, sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius))
+            feelsLikeNight.text = convertTemperature(this.feelslikeNight, sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius))
+            pressure.text = convertPressure(
+                this.pressure,
+                sharedPreferences.getInt("PRESSURE_SCALE", R.id.atm_hPa)
+            )
             humidity.text = this.humidity.toString().plus(" %")
-            dewPoint.text = this.dewPoint.toInt().toString().plus("°C")
+            dewPoint.text = convertTemperature(
+                this.dewPoint,
+                sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius)
+            )
             uvIndex.text = this.uvIndex.toInt().toString()
-            windSpeed.text = this.windSpeed.toString().plus(" km/h")
+            windSpeed.text = convertWindSpeed(
+                this.windSpeed,
+                sharedPreferences.getInt("WIND_SCALE", R.id.speed_km_h)
+            )
             windDirection.text = setupWindDirection(this.windDirection)
             probabilityOfPrecipitation.text =
                 this.propabilityOfPrecipitation.times(100).toInt().toString().plus(" %")

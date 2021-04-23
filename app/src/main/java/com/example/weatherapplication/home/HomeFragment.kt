@@ -1,5 +1,8 @@
 package com.example.weatherapplication.home
 
+import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -21,6 +24,8 @@ import java.util.*
 class HomeFragment : Fragment() {
     private val key = "HOME"
     private val viewModel by inject<WeatherViewModel>()
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var myApplication: Application
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +49,8 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        myApplication = requireActivity().application
+        sharedPreferences = myApplication.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
         val refreshLayout =
             requireActivity().findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
 
@@ -79,13 +86,32 @@ class HomeFragment : Fragment() {
         viewModel.currentWeather.observe(viewLifecycleOwner, {
             title.text = it?.timezone ?: "wait"
             status.text = it?.weatherDescription?.capitalize(Locale.ENGLISH) ?: "wait"
-            temperature.text = it?.temperature?.toInt().toString().plus("°C")
+            temperature.text = convertTemperature(
+                it?.temperature,
+                sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius)
+            )
             humidity.text = it?.humidity.toString().plus(" %")
-            windSpeed.text = it?.windSpeed.toString().plus(" km/h")
-            reelFeel.text = it?.feelsLike?.toInt().toString().plus("°C")
-            dewPoint.text = "Dew Point: ".plus(it?.dewPoint?.toInt()).plus("°C")
+            windSpeed.text = convertWindSpeed(
+                it?.windSpeed,
+                sharedPreferences.getInt("WIND_SCALE", R.id.speed_km_h)
+            )
+            reelFeel.text = convertTemperature(
+                it?.feelsLike,
+                sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius)
+            )
+            dewPoint.text = "Dew Point: ".plus(
+                convertTemperature(
+                    it?.dewPoint,
+                    sharedPreferences.getInt("TEMPERATURE_SCALE", R.id.celsius)
+                )
+            )
             uvIndex.text = "UV Index: ".plus(it?.uvIndex?.toInt())
-            visibility.text = "Visibility: ".plus(it?.visibility?.div(1000)).plus(" km")
+            visibility.text = "Visibility: ".plus(
+                convertLength(
+                    it?.visibility,
+                    sharedPreferences.getInt("VISIBILITY_SCALE", R.id.visibility_km)
+                )
+            )
             statusPicture.setImageResource(getStatusImage(it?.weatherMain))
             sunrise.text = if (it?.sunrise != null)
                 sunriseSunsetDateFormat.format(Date(it.sunrise.toString().plus("000").toLong()))
@@ -103,7 +129,8 @@ class HomeFragment : Fragment() {
         viewModel.dailyWeather.observe(viewLifecycleOwner, {
             if (it?.size != 0) {
                 rainChance.text =
-                    it?.get(0)?.probabilityOfPrecipitation?.times(100)?.toInt().toString().plus(" %")
+                    it?.get(0)?.probabilityOfPrecipitation?.times(100)?.toInt().toString()
+                        .plus(" %")
                 precipitation.text =
                     "Precipitation: ".plus(it[0].rain).plus(" mm")
             }
@@ -138,5 +165,39 @@ internal fun getStatusImage(status: String?): Int {
         "Clear" -> R.drawable.mostly_sunny
         "Clouds" -> R.drawable.mostly_cloudy
         else -> R.drawable.mostly_sunny
+    }
+}
+
+internal fun convertLength(length: Int?, sharedPrefs: Int): String {
+    return when (sharedPrefs) {
+        R.id.visibility_km -> length?.div(1000).toString().plus(" km")
+        R.id.visibility_ft -> length?.times(3.281)?.toInt().toString().plus(" ft")
+        else -> "Error"
+    }
+}
+
+internal fun convertWindSpeed(windSpeed: Float?, sharedPrefs: Int): String {
+    return when (sharedPrefs) {
+        R.id.speed_km_h -> windSpeed?.times(3.6)?.toInt().toString().plus(" km/h")
+        R.id.speed_m_s -> windSpeed.toString().plus(" m/s")
+        R.id.speed_mph -> windSpeed?.times(2.237)?.toInt().toString().plus(" mph")
+        else -> "Error"
+    }
+}
+
+internal fun convertTemperature(temperature: Float?, sharedPrefs: Int): String {
+    return when (sharedPrefs) {
+        R.id.celsius -> temperature?.toInt().toString().plus("°C")
+        R.id.fahrenheit -> temperature?.times(1.8)?.toInt()?.plus(32).toString().plus("°F")
+        R.id.kelvin -> temperature?.plus(273.15)?.toInt().toString().plus("K")
+        else -> "Error"
+    }
+}
+
+internal fun convertPressure(pressure: Int, sharedPrefs: Int): String {
+    return when (sharedPrefs) {
+        R.id.atm_hPa -> pressure.toString().plus(" hPa")
+        R.id.atm_mmHg -> pressure.div(1.333).toInt().toString().plus(" mmHg")
+        else -> "Error"
     }
 }

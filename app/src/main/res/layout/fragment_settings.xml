@@ -20,14 +20,13 @@
         <RadioGroup
             android:id="@+id/temperature_scales"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/celsius">
+            android:layout_height="wrap_content">
 
             <RadioButton
                 android:id="@+id/celsius"
                 android:layout_width="match_parent"
-                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/margin_settings_buttons"
                 android:text="Celsius °C"
                 android:textColor="@color/white" />
 
@@ -60,8 +59,7 @@
         <RadioGroup
             android:id="@+id/wind_scales"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/speed_km_h">
+            android:layout_height="wrap_content">
 
             <RadioButton
                 android:id="@+id/speed_km_h"
@@ -98,13 +96,12 @@
             android:textColor="@color/second_main_color" />
 
         <RadioGroup
-            android:id="@+id/atmospheric_pressure"
+            android:id="@+id/pressure_scales"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/atm_mm">
+            android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/atm_mm"
+                android:id="@+id/atm_mmHg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/margin_settings_buttons"
@@ -112,6 +109,7 @@
                 android:textColor="@color/white" />
 
             <RadioButton
+                android:id="@+id/atm_hPa"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="@dimen/margin_settings_buttons"
@@ -128,10 +126,9 @@
             android:textColor="@color/second_main_color" />
 
         <RadioGroup
-            android:id="@+id/visibility_settings"
+            android:id="@+id/visibility_scales"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/visibility_km">
+            android:layout_height="wrap_content">
 
             <RadioButton
                 android:id="@+id/visibility_km"
@@ -151,35 +148,12 @@
                 android:textColor="@color/white" />
         </RadioGroup>
 
-        <TextView
+        <CheckBox
+            android:layout_marginTop="30dp"
+            android:id="@+id/location_settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/margin_home"
-            android:text="Time"
-            android:textColor="@color/second_main_color" />
-
-        <RadioGroup
-            android:id="@+id/time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checkedButton="@+id/time_twelve">
-
-            <RadioButton
-                android:id="@+id/time_twelve"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/margin_settings_buttons"
-                android:text="24-h"
-                android:textColor="@color/white" />
-
-            <RadioButton
-                android:id="@+id/time_twenty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/margin_settings_buttons"
-                android:layout_marginBottom="@dimen/margin_settings_buttons"
-                android:text="12-h"
-                android:textColor="@color/white" />
-        </RadioGroup>
+            android:text="Use user location"
+            android:textColor="@color/white" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
