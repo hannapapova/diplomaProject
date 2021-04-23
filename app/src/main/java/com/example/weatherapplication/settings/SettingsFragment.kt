@@ -4,9 +4,11 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
@@ -28,6 +30,7 @@ class SettingsFragment : Fragment() {
     private lateinit var windScales: RadioGroup
     private lateinit var pressureScales: RadioGroup
     private lateinit var visibilityScales: RadioGroup
+    private lateinit var locationSettings: CheckBox
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +60,7 @@ class SettingsFragment : Fragment() {
         windScales.check(sharedPreferences.getInt("WIND_SCALE", R.id.speed_km_h))
         pressureScales.check(sharedPreferences.getInt("PRESSURE_SCALE", R.id.atm_hPa))
         visibilityScales.check(sharedPreferences.getInt("VISIBILITY_SCALE", R.id.visibility_km))
+        locationSettings.isChecked = sharedPreferences.getBoolean("LOCATION", true)
     }
 
     private fun setupCheckedChangeListeners() {
@@ -76,6 +80,10 @@ class SettingsFragment : Fragment() {
         visibilityScales.setOnCheckedChangeListener { _, checkedId ->
             editor.putInt("VISIBILITY_SCALE", checkedId).apply()
         }
+
+        locationSettings.setOnCheckedChangeListener { _, isChecked ->
+            editor.putBoolean("LOCATION", isChecked).apply()
+        }
     }
 
     private fun setupLateInitValues() {
@@ -83,8 +91,8 @@ class SettingsFragment : Fragment() {
         windScales = requireActivity().findViewById(R.id.wind_scales)
         pressureScales = requireActivity().findViewById(R.id.pressure_scales)
         visibilityScales = requireActivity().findViewById(R.id.visibility_scales)
+        locationSettings = requireActivity().findViewById(R.id.location_settings)
         myApplication = requireActivity().application
-
         sharedPreferences = myApplication.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
     }
 }

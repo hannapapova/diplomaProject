@@ -147,5 +147,13 @@
                 android:text="Ft"
                 android:textColor="@color/white" />
         </RadioGroup>
+
+        <CheckBox
+            android:layout_marginTop="30dp"
+            android:id="@+id/location_settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Use user location"
+            android:textColor="@color/white" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
