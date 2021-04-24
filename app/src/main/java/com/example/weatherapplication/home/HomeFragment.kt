@@ -28,7 +28,6 @@ import java.util.*
 class HomeFragment : Fragment() {
     private val key = "HOME"
     private val viewModel by inject<WeatherViewModel>()
-//    private val args: HomeFragmentArgs by navArgs()
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var myApplication: Application
 
@@ -49,23 +48,6 @@ class HomeFragment : Fragment() {
         setupStatusBarColor(window, requireContext())
         setupBar(key, toolbar)
         setupBarActions(key, view, toolbar)
-
-//        toolbar?.setNavigationOnClickListener {
-//            val action = HomeFragmentDirections.homeFragmentToFavoritesFragment(
-//                name = args.name,
-//                adminName1 = args.adminName1,
-//                countryName = args.countryName,
-//                latitude = args.latitude,
-//                longitude = args.longitude
-//            )
-//            Navigation.findNavController(view).navigate(action)
-//        }
-//        toolbar?.setOnMenuItemClickListener {
-//            Navigation.findNavController(view)
-//                .navigate(R.id.homeFragment_to_settingsFragment)
-//            true
-//        }
-
         return view
     }
 
@@ -104,8 +86,11 @@ class HomeFragment : Fragment() {
         val sunriseSunsetDateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
+        viewModel.currentCity.observe(viewLifecycleOwner, {
+            title.text = it?.name ?: "wait"
+        })
+
         viewModel.currentWeather.observe(viewLifecycleOwner, {
-            title.text = it?.timezone ?: "wait"
             status.text = it?.weatherDescription?.capitalize(Locale.ENGLISH) ?: "wait"
             temperature.text = convertTemperature(
                 it?.temperature,

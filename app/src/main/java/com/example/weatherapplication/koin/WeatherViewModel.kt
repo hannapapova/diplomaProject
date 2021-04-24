@@ -32,19 +32,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var longitude: Float = 27.567444F
 
     init {
-//        Log.d("viewmodel", "init")
         val forecastDao = ForecastDatabase.getDatabase(application).forecastDao()
         repository = ForecastRepository(forecastDao)
-
-//        getCitiesResult()
-//
-//        latitude = cities.value?.get(0)?.latitude?.toFloat() ?: 53.893009F
-//        longitude = cities.value?.get(0)?.longitude?.toFloat() ?: 27.567444F
-//
-//        Log.d("viewmodel", "lat = $latitude, lon = $longitude")
-//
-//        getResult()
-
         currentWeather = repository.savedCurrentWeather
         hourlyWeather = repository.savedHourlyWeather
         dailyWeather = repository.savedDailyWeather
@@ -53,13 +42,10 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun putSelectedCity(city: Geoname) {
-        Log.d("viewmodel", "putSelectedCity ")
-        Log.d("viewmodel", "putSelectedCity before = " + selectedCity.value)
         selectedCity.value = city
-        Log.d("viewmodel", "putSelectedCity after = " + selectedCity.value)
     }
 
-    fun putSelectedIntoFavourites(){
+    fun putSelectedIntoFavourites() {
         val city = FavouriteCity(
             selectedCity.value!!.name,
             selectedCity.value!!.adminName1,
@@ -72,15 +58,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun putSelectedIntoRepo() {
-        Log.d("viewmodel", "putSelectedIntoRepo selectedCity: " + selectedCity.value)
-        Log.d(
-            "viewmodel",
-            "putSelectedIntoRepo before delete: " + repository.savedCurrentCity.value
-        )
-        Log.d("viewmodel", "putSelectedIntoRepo before delete: " + currentCity.value)
         deleteCurrentCityTable()
-        Log.d("viewmodel", "putSelectedIntoRepo after delete: " + repository.savedCurrentCity.value)
-        Log.d("viewmodel", "putSelectedIntoRepo after delete: " + currentCity.value)
         val city = CurrentCity(
             selectedCity.value!!.name,
             selectedCity.value!!.adminName1,
@@ -88,38 +66,17 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
             selectedCity.value!!.latitude,
             selectedCity.value!!.longitude
         )
-//        Log.d("viewmodel", "putSelectedIntoRepo before insert: "+repository.savedCurrentCity.value)
-//        Log.d("viewmodel", "putSelectedIntoRepo before insert: "+currentCity.value)
         insertCurrentCity(city)
-        Log.d("viewmodel", "putSelectedIntoRepo after insert: " + repository.savedCurrentCity.value)
-        Log.d("viewmodel", "putSelectedIntoRepo after insert: " + currentCity.value)
         currentCity = repository.savedCurrentCity
-        Log.d("viewmodel", "putSelectedIntoRepo after =: " + repository.savedCurrentCity.value)
-        Log.d("viewmodel", "putSelectedIntoRepo after =: " + currentCity.value)
     }
 
-
-
     fun newCoord(city: CurrentCity) {
-//        Log.d("viewmodel", "in newCoord")
-
-//            getCitiesResult()
-
-//            Log.d("viewmodel", cities.value?.get(0).toString())
-
-//            latitude = cities.value?.get(0)?.latitude?.toFloat() ?: 53.893009F
-//            longitude = cities.value?.get(0)?.longitude?.toFloat() ?: 27.567444F
-
         latitude = city.latitude.toFloat()
         longitude = city.longitude.toFloat()
-
-//        Log.d("viewmodel", "lat = $latitude, lon = $longitude")
     }
 
     fun getResult(city: CurrentCity) {
-//        Log.d("viewmodel", "get result")
         newCoord(city)
-
         RetrofitInstance.weatherApi.getWeather(latitude, longitude, "metric")
             .enqueue(object :
                 Callback<Response> {
@@ -134,9 +91,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                     response: retrofit2.Response<Response>
                 ) {
                     if (response.isSuccessful) {
-//                        Log.d("viewmodel", "on response")
                         val responseBody: Response = response.body()!!
-//                        Log.d("viewmodel", responseBody.toString())
 
                         //region Refresh forecast database
                         deleteCurrentWeatherTable()
@@ -224,32 +179,22 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getCitiesResult(cityName: String) {
-//        Log.d("viewmodel", "getCitiesResult")
-
         RetrofitInstance.cityApi.getCities(cityName).enqueue(object : Callback<ResponseCity> {
             override fun onFailure(call: Call<ResponseCity>, t: Throwable) {
                 Log.d("viewmodel", t.message.toString())
             }
-
             override fun onResponse(
                 call: Call<ResponseCity>,
                 response: retrofit2.Response<ResponseCity>
             ) {
                 if (response.isSuccessful) {
-//                    Log.d("viewmodel", "on response")
                     val responseBody: ResponseCity = response.body()!!
-
                     suitableCities.value = responseBody.geonames
-
-//                    Log.d("viewmodel", "in getCitiesResult")
-//                    Log.d("viewmodel", cities.value?.get(0).toString())
-
                 } else {
                     Log.d("viewmodel", "on response, but not successful")
                     Log.d("viewmodel", response.errorBody().toString())
                 }
             }
-
         })
     }
 

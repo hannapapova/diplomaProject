@@ -58,18 +58,11 @@ class SearchFragment : Fragment() {
                 }
             })
         }).map { text -> text.trim() }
-            .debounce(250, TimeUnit.MILLISECONDS)
+            .debounce(200, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .filter { text -> text.isNotBlank() }
             .subscribe { text ->
-//                Log.d("viewmodel", "subscriber: $text")
                 viewModel.getCitiesResult(text)
             }
-
-//        btn_go.setOnClickListener {
-//            viewModel.getCitiesResult(et_search.text.toString())
-////            viewModel.newCoord()
-////            viewModel.getResult()
-//        }
     }
 }
