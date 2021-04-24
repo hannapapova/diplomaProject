@@ -28,7 +28,7 @@ import java.util.*
 class HomeFragment : Fragment() {
     private val key = "HOME"
     private val viewModel by inject<WeatherViewModel>()
-    private val args: HomeFragmentArgs by navArgs()
+//    private val args: HomeFragmentArgs by navArgs()
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var myApplication: Application
 
@@ -42,37 +42,29 @@ class HomeFragment : Fragment() {
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val window = requireActivity().window
 
-        viewModel.getResult(
-            Geoname(
-                args.adminName1,
-                args.countryName,
-                args.latitude,
-                args.longitude,
-                args.name
-            )
-        )
+        viewModel.currentCity.value?.let { viewModel.getResult(it) }
         setupTitle(title, key)
         setupToolBarBackgroundColor(toolbar, requireContext())
         setupBackgroundColor(view)
         setupStatusBarColor(window, requireContext())
         setupBar(key, toolbar)
-//        setupBarActions(key, view, toolbar)
+        setupBarActions(key, view, toolbar)
 
-        toolbar?.setNavigationOnClickListener {
-            val action = HomeFragmentDirections.homeFragmentToFavoritesFragment(
-                name = args.name,
-                adminName1 = args.adminName1,
-                countryName = args.countryName,
-                latitude = args.latitude,
-                longitude = args.longitude
-            )
-            Navigation.findNavController(view).navigate(action)
-        }
-        toolbar?.setOnMenuItemClickListener {
-            Navigation.findNavController(view)
-                .navigate(R.id.homeFragment_to_settingsFragment)
-            true
-        }
+//        toolbar?.setNavigationOnClickListener {
+//            val action = HomeFragmentDirections.homeFragmentToFavoritesFragment(
+//                name = args.name,
+//                adminName1 = args.adminName1,
+//                countryName = args.countryName,
+//                latitude = args.latitude,
+//                longitude = args.longitude
+//            )
+//            Navigation.findNavController(view).navigate(action)
+//        }
+//        toolbar?.setOnMenuItemClickListener {
+//            Navigation.findNavController(view)
+//                .navigate(R.id.homeFragment_to_settingsFragment)
+//            true
+//        }
 
         return view
     }
@@ -87,15 +79,7 @@ class HomeFragment : Fragment() {
         setupRecyclers()
 
         refreshLayout.setOnRefreshListener {
-            viewModel.getResult(
-                Geoname(
-                    args.adminName1,
-                    args.countryName,
-                    args.latitude,
-                    args.longitude,
-                    args.name
-                )
-            )
+            viewModel.currentCity.value?.let { viewModel.getResult(it) }
             refreshLayout.isRefreshing = false
         }
     }

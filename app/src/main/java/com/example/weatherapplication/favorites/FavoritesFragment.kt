@@ -8,21 +8,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
-import com.example.weatherapplication.R
+import com.example.weatherapplication.*
 import com.example.weatherapplication.koin.WeatherViewModel
-import com.example.weatherapplication.model.cities.Geoname
-import com.example.weatherapplication.setupBackgroundColor
-import com.example.weatherapplication.setupBar
-import com.example.weatherapplication.setupTitle
 import kotlinx.android.synthetic.main.fragment_favorites.*
 import org.koin.android.ext.android.inject
 
 class FavoritesFragment : Fragment() {
     private val key = "FAVORITES"
     private val viewModel by inject<WeatherViewModel>()
-    private val args: FavoritesFragmentArgs by navArgs()
+//    private val args: FavoritesFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,23 +30,23 @@ class FavoritesFragment : Fragment() {
         setupTitle(title, key)
         setupBackgroundColor(view)
         setupBar(key, toolbar)
-//        setupBarActions(key, view, toolbar)
+        setupBarActions(key, view, toolbar)
 
-        toolbar?.setNavigationOnClickListener {
-            val action = FavoritesFragmentDirections.actionFavoritesFragmentToHomeFragment(
-                name = args.name,
-                adminName1 = args.adminName1,
-                countryName = args.countryName,
-                latitude = args.latitude,
-                longitude = args.longitude
-            )
-            Navigation.findNavController(view).navigate(action)
-        }
-        toolbar?.setOnMenuItemClickListener {
-            Navigation.findNavController(view)
-                .navigate(R.id.favoritesFragment_to_searchFragment)
-            true
-        }
+//        toolbar?.setNavigationOnClickListener {
+//            val action = FavoritesFragmentDirections.actionFavoritesFragmentToHomeFragment(
+//                name = args.name,
+//                adminName1 = args.adminName1,
+//                countryName = args.countryName,
+//                latitude = args.latitude,
+//                longitude = args.longitude
+//            )
+//            Navigation.findNavController(view).navigate(action)
+//        }
+//        toolbar?.setOnMenuItemClickListener {
+//            Navigation.findNavController(view)
+//                .navigate(R.id.favoritesFragment_to_searchFragment)
+//            true
+//        }
 
         return view
     }
@@ -60,24 +54,40 @@ class FavoritesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getResult(
-            Geoname(
-                args.adminName1,
-                args.countryName,
-                args.latitude,
-                args.longitude,
-                args.name
-            )
+//        viewModel.getResult(
+//            Geoname(
+//                args.adminName1,
+//                args.countryName,
+//                args.latitude,
+//                args.longitude,
+//                args.name
+//            )
+//        )
+
+//        Log.d("viewmodel", "onViewCreated")
+
+        Log.d("viewModel", "favourites selected city " + viewModel.selectedCity.value.toString())
+        Log.d(
+            "viewModel",
+            "favourites repo saved city " + viewModel.repository.savedCurrentCity.value.toString()
         )
+        Log.d("viewModel", "favourites current city " + viewModel.currentCity.value.toString())
 
-        Log.d("viewmodel", "onViewCreated")
+        Log.d("viewmodel", "favourites before putSelectedIntoRepo: " + viewModel.currentCity.value)
+        if (viewModel.selectedCity.value != null) {
+            viewModel.putSelectedIntoRepo()
+            Log.d(
+                "viewmodel",
+                "favourites after putSelectedIntoRepo: " + viewModel.currentCity.value
+            )
+        }
 
-        viewModel.cities.observe(viewLifecycleOwner, {
-            tv_city_favourites.text = it.toString()
+        viewModel.selectedCity.observe(viewLifecycleOwner, {
+            tv_city_favourites.text = "Selected: " + it?.toString() ?: "wait"
         })
 
-        viewModel.currentWeather.observe(viewLifecycleOwner, {
-            tv_current.text = it?.toString() ?: "wait"
+        viewModel.currentCity.observe(viewLifecycleOwner, {
+            tv_current.text = "Current: " + it?.toString() ?: "wait"
         })
     }
 }

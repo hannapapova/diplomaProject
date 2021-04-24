@@ -43,7 +43,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.cities.observe(viewLifecycleOwner, {
-            recycler_cities.adapter = CitiesAdapter(it)
+            recycler_cities.adapter = CitiesAdapter(it, viewModel)
         })
 
         Observable.create(ObservableOnSubscribe<String> { subscriber ->
@@ -63,7 +63,7 @@ class SearchFragment : Fragment() {
             .distinctUntilChanged()
             .filter { text -> text.isNotBlank() }
             .subscribe { text ->
-                Log.d("viewmodel", "subscriber: $text")
+//                Log.d("viewmodel", "subscriber: $text")
                 viewModel.getCitiesResult(text)
             }
 
