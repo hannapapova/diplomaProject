@@ -1,7 +1,6 @@
 package com.example.weatherapplication.search
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,7 +41,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.cities.observe(viewLifecycleOwner, {
+        viewModel.suitableCities.observe(viewLifecycleOwner, {
             recycler_cities.adapter = CitiesAdapter(it, viewModel)
         })
 

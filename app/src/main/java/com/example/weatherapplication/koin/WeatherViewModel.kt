@@ -12,10 +12,7 @@ import com.example.weatherapplication.model.cities.ResponseCity
 import com.example.weatherapplication.model.forecast.Response
 import com.example.weatherapplication.room.database.ForecastDatabase
 import com.example.weatherapplication.room.database.ForecastRepository
-import com.example.weatherapplication.room.entity.CurrentCity
-import com.example.weatherapplication.room.entity.SavedCurrentWeather
-import com.example.weatherapplication.room.entity.SavedDailyWeather
-import com.example.weatherapplication.room.entity.SavedHourlyWeather
+import com.example.weatherapplication.room.entity.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -28,8 +25,9 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var hourlyWeather: LiveData<List<SavedHourlyWeather>>
     var dailyWeather: LiveData<List<SavedDailyWeather>>
     var currentCity: LiveData<CurrentCity>
+    var favouriteCities: LiveData<List<FavouriteCity>>
     var selectedCity = MutableLiveData<Geoname>()
-    var cities = MutableLiveData<List<Geoname>>()
+    var suitableCities = MutableLiveData<List<Geoname>>()
     var latitude: Float = 53.893009F
     var longitude: Float = 27.567444F
 
@@ -51,6 +49,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         hourlyWeather = repository.savedHourlyWeather
         dailyWeather = repository.savedDailyWeather
         currentCity = repository.savedCurrentCity
+        favouriteCities = repository.favouriteCities
     }
 
     fun putSelectedCity(city: Geoname) {
@@ -60,13 +59,28 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         Log.d("viewmodel", "putSelectedCity after = " + selectedCity.value)
     }
 
+    fun putSelectedIntoFavourites(){
+        val city = FavouriteCity(
+            selectedCity.value!!.name,
+            selectedCity.value!!.adminName1,
+            selectedCity.value!!.countryName,
+            selectedCity.value!!.latitude,
+            selectedCity.value!!.longitude
+        )
+        insertFavouriteCity(city)
+        favouriteCities = repository.favouriteCities
+    }
+
     fun putSelectedIntoRepo() {
-        Log.d("viewmodel", "putSelectedIntoRepo selectedCity: "+selectedCity.value)
-        Log.d("viewmodel", "putSelectedIntoRepo before delete: "+repository.savedCurrentCity.value)
-        Log.d("viewmodel", "putSelectedIntoRepo before delete: "+currentCity.value)
+        Log.d("viewmodel", "putSelectedIntoRepo selectedCity: " + selectedCity.value)
+        Log.d(
+            "viewmodel",
+            "putSelectedIntoRepo before delete: " + repository.savedCurrentCity.value
+        )
+        Log.d("viewmodel", "putSelectedIntoRepo before delete: " + currentCity.value)
         deleteCurrentCityTable()
-        Log.d("viewmodel", "putSelectedIntoRepo after delete: "+repository.savedCurrentCity.value)
-        Log.d("viewmodel", "putSelectedIntoRepo after delete: "+currentCity.value)
+        Log.d("viewmodel", "putSelectedIntoRepo after delete: " + repository.savedCurrentCity.value)
+        Log.d("viewmodel", "putSelectedIntoRepo after delete: " + currentCity.value)
         val city = CurrentCity(
             selectedCity.value!!.name,
             selectedCity.value!!.adminName1,
@@ -77,12 +91,14 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 //        Log.d("viewmodel", "putSelectedIntoRepo before insert: "+repository.savedCurrentCity.value)
 //        Log.d("viewmodel", "putSelectedIntoRepo before insert: "+currentCity.value)
         insertCurrentCity(city)
-        Log.d("viewmodel", "putSelectedIntoRepo after insert: "+repository.savedCurrentCity.value)
-        Log.d("viewmodel", "putSelectedIntoRepo after insert: "+currentCity.value)
+        Log.d("viewmodel", "putSelectedIntoRepo after insert: " + repository.savedCurrentCity.value)
+        Log.d("viewmodel", "putSelectedIntoRepo after insert: " + currentCity.value)
         currentCity = repository.savedCurrentCity
-        Log.d("viewmodel", "putSelectedIntoRepo after =: "+repository.savedCurrentCity.value)
-        Log.d("viewmodel", "putSelectedIntoRepo after =: "+currentCity.value)
+        Log.d("viewmodel", "putSelectedIntoRepo after =: " + repository.savedCurrentCity.value)
+        Log.d("viewmodel", "putSelectedIntoRepo after =: " + currentCity.value)
     }
+
+
 
     fun newCoord(city: CurrentCity) {
 //        Log.d("viewmodel", "in newCoord")
@@ -223,7 +239,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
 //                    Log.d("viewmodel", "on response")
                     val responseBody: ResponseCity = response.body()!!
 
-                    cities.value = responseBody.geonames
+                    suitableCities.value = responseBody.geonames
 
 //                    Log.d("viewmodel", "in getCitiesResult")
 //                    Log.d("viewmodel", cities.value?.get(0).toString())
@@ -259,6 +275,12 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     fun insertCurrentCity(city: CurrentCity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertCurrentCity(city)
+        }
+    }
+
+    fun insertFavouriteCity(city: FavouriteCity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertFavouriteCity(city)
         }
     }
 

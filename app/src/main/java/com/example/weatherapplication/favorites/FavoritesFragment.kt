@@ -76,14 +76,15 @@ class FavoritesFragment : Fragment() {
         Log.d("viewmodel", "favourites before putSelectedIntoRepo: " + viewModel.currentCity.value)
         if (viewModel.selectedCity.value != null) {
             viewModel.putSelectedIntoRepo()
+            viewModel.putSelectedIntoFavourites()
             Log.d(
                 "viewmodel",
                 "favourites after putSelectedIntoRepo: " + viewModel.currentCity.value
             )
         }
 
-        viewModel.selectedCity.observe(viewLifecycleOwner, {
-            tv_city_favourites.text = "Selected: " + it?.toString() ?: "wait"
+        viewModel.favouriteCities.observe(viewLifecycleOwner, {
+            tv_city_favourites.text = "Favourite: " + it?.toString() ?: "wait"
         })
 
         viewModel.currentCity.observe(viewLifecycleOwner, {
