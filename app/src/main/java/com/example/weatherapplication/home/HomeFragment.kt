@@ -37,7 +37,10 @@ class HomeFragment : Fragment() {
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val window = requireActivity().window
 
-        viewModel.currentCity.value?.let { viewModel.getForecast(it) }
+//        viewModel.currentCity.value?.let { viewModel.getForecast(it) }
+
+        viewModel.getForecast(viewModel.city)
+
         setupTitle(title, key)
         setupToolBarBackgroundColor(toolbar, requireContext())
         setupBackgroundColor(view)
@@ -57,7 +60,9 @@ class HomeFragment : Fragment() {
         setupRecyclers()
 
         refreshLayout.setOnRefreshListener {
-            viewModel.currentCity.value?.let { viewModel.getForecast(it) }
+//            viewModel.currentCity.value?.let { viewModel.getForecast(it) }
+
+            viewModel.getForecast(viewModel.city)
             refreshLayout.isRefreshing = false
         }
     }
@@ -83,7 +88,8 @@ class HomeFragment : Fragment() {
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
         viewModel.currentCity.observe(viewLifecycleOwner, {
-            title.text = it?.name ?: "Home"
+//            title.text = it?.name ?: "Home"
+            title.text = it?.name ?: viewModel.city.name
         })
 
         viewModel.currentWeather.observe(viewLifecycleOwner, {
