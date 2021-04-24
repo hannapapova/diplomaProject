@@ -53,7 +53,7 @@ class HomeFragment : Fragment() {
 
 //        viewModel.currentCity.value?.let { viewModel.getForecast(it) }
 
-        viewModel.getForecast(viewModel.city)
+        viewModel.cityGps.value?.let { viewModel.getForecast(it) }
 
         setupTitle(title, key)
         setupToolBarBackgroundColor(toolbar, requireContext())
@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
             if (sharedPreferences.getBoolean("LOCATION", true)) {
                 getLastLocation()
             }
-            viewModel.getForecast(viewModel.city)
+            viewModel.cityGps.value?.let { viewModel.getForecast(it) }
             refreshLayout.isRefreshing = false
         }
     }
@@ -108,8 +108,7 @@ class HomeFragment : Fragment() {
         val sunriseSunsetDateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
-        viewModel.currentCity.observe(viewLifecycleOwner, {
-//            title.text = it?.name ?: "Home"
+        viewModel.cityGps.observe(viewLifecycleOwner,{
             title.text = it?.name ?: viewModel.city.name
         })
 
@@ -235,7 +234,7 @@ class HomeFragment : Fragment() {
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
-            viewModel.city = createCurrentCity(p0.lastLocation.latitude, p0.lastLocation.longitude)
+            viewModel.cityGps.value = createCurrentCity(p0.lastLocation.latitude, p0.lastLocation.longitude)
         }
     }
 
@@ -255,7 +254,7 @@ class HomeFragment : Fragment() {
                     if (location == null) {
                         getNewLocation()
                     } else {
-                        viewModel.city = createCurrentCity(it.result.latitude, it.result.longitude)
+                        viewModel.cityGps.value = createCurrentCity(it.result.latitude, it.result.longitude)
                     }
                 }
             } else {
