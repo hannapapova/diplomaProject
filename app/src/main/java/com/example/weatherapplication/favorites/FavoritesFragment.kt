@@ -39,7 +39,6 @@ class FavoritesFragment : Fragment() {
 
         if (viewModel.selectedCity.value != null) {
             viewModel.setSelectedAsCurrent()
-            viewModel.putSelectedIntoFavouritesDB()
         }
 
         viewModel.favouriteCities.observe(viewLifecycleOwner, {
