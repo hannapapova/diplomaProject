@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.example.weatherapplication.*
 import com.example.weatherapplication.adapter.CitiesAdapter
 import com.example.weatherapplication.koin.WeatherViewModel
@@ -33,7 +34,13 @@ class SearchFragment : Fragment() {
         setupTitle(title, key)
         setupBackgroundColor(view)
         setupBar(key, toolbar)
-        setupBarActions(key, view, toolbar)
+//        setupBarActions(key, view, toolbar)
+        toolbar?.setNavigationOnClickListener {
+            fragmentHideKeyboard(requireContext(), view)
+            Navigation.findNavController(view).popBackStack()
+        }
+
+        viewModel.favouriteCities.value?.let { viewModel.deleteNotFavouritesFromDB(it) }
 
         return view
     }
@@ -66,5 +73,13 @@ class SearchFragment : Fragment() {
             .subscribe { text ->
                 viewModel.getCitiesResult(text)
             }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.suitableCities.value?.forEach { suitable ->
+            if (suitable.inFavourites)
+                viewModel.putSelectedIntoFavouritesDB(suitable)
+        }
     }
 }

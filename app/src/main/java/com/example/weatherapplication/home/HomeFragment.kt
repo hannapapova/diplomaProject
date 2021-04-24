@@ -1,22 +1,33 @@
 package com.example.weatherapplication.home
 
+import android.Manifest
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Bundle
+import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.weatherapplication.*
+import com.example.weatherapplication.R
 import com.example.weatherapplication.adapter.DailyAdapter
 import com.example.weatherapplication.adapter.HourlyAdapter
 import com.example.weatherapplication.koin.WeatherViewModel
+import com.example.weatherapplication.room.entity.CurrentCity
+import com.google.android.gms.location.*
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,6 +37,9 @@ class HomeFragment : Fragment() {
     private val viewModel by inject<WeatherViewModel>()
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var myApplication: Application
+    private var PERMISSION_ID = 322
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +51,10 @@ class HomeFragment : Fragment() {
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val window = requireActivity().window
 
-        viewModel.currentCity.value?.let { viewModel.getForecast(it) }
+//        viewModel.currentCity.value?.let { viewModel.getForecast(it) }
+
+        viewModel.cityGps.value?.let { viewModel.getForecast(it) }
+
         setupTitle(title, key)
         setupToolBarBackgroundColor(toolbar, requireContext())
         setupBackgroundColor(view)
@@ -50,14 +67,23 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         myApplication = requireActivity().application
         sharedPreferences = myApplication.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         val refreshLayout =
             requireActivity().findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
 
         setupObservers()
         setupRecyclers()
 
+        if (sharedPreferences.getBoolean("LOCATION", true)) {
+            getLastLocation()
+        }
+
         refreshLayout.setOnRefreshListener {
-            viewModel.currentCity.value?.let { viewModel.getForecast(it) }
+//            viewModel.currentCity.value?.let { viewModel.getForecast(it) }
+            if (sharedPreferences.getBoolean("LOCATION", true)) {
+                getLastLocation()
+            }
+            viewModel.cityGps.value?.let { viewModel.getForecast(it) }
             refreshLayout.isRefreshing = false
         }
     }
@@ -82,8 +108,8 @@ class HomeFragment : Fragment() {
         val sunriseSunsetDateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
-        viewModel.currentCity.observe(viewLifecycleOwner, {
-            title.text = it?.name ?: "wait"
+        viewModel.cityGps.observe(viewLifecycleOwner,{
+            title.text = it?.name ?: viewModel.city.name
         })
 
         viewModel.currentWeather.observe(viewLifecycleOwner, {
@@ -152,6 +178,108 @@ class HomeFragment : Fragment() {
             if (it?.size != 0)
                 hourlyRecycler.adapter = HourlyAdapter(it)
         })
+    }
+
+    private fun createCurrentCity(latitude: Double, longitude: Double): CurrentCity {
+        val geoCoder = Geocoder(requireContext(), Locale.ENGLISH)
+        val list = geoCoder.getFromLocation(latitude, longitude, 1)
+        return CurrentCity(
+            list[0].locality,
+            list[0].adminArea,
+            list[0].countryName,
+            latitude.toString(),
+            longitude.toString()
+        )
+    }
+
+    private fun requestPermissions() {
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ), PERMISSION_ID
+        )
+    }
+
+    private fun isLocationServicesEnabled(): Boolean {
+        val locationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+            LocationManager.NETWORK_PROVIDER
+        )
+    }
+
+    private fun getNewLocation() {
+        locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = 0
+        locationRequest.fastestInterval = 0
+        locationRequest.numUpdates = 2
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.myLooper()
+            )
+        }
+    }
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(p0: LocationResult) {
+            viewModel.cityGps.value = createCurrentCity(p0.lastLocation.latitude, p0.lastLocation.longitude)
+        }
+    }
+
+
+    private fun getLastLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            if (isLocationServicesEnabled()) {
+                fusedLocationClient.lastLocation.addOnCompleteListener {
+                    val location = it.result
+                    if (location == null) {
+                        getNewLocation()
+                    } else {
+                        viewModel.cityGps.value = createCurrentCity(it.result.latitude, it.result.longitude)
+                    }
+                }
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Please enable your location service",
+                    Toast.LENGTH_SHORT
+                )
+                    .show()
+            }
+        } else {
+            requestPermissions()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == PERMISSION_ID) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.i("location", "Permission granted!")
+            }
+        }
     }
 }
 

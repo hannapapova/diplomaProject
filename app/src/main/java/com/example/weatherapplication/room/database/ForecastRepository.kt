@@ -50,4 +50,8 @@ class ForecastRepository(private val forecastDao: ForecastDao) {
     suspend fun deleteCurrentCityTable() {
         forecastDao.deleteCurrentCityTable()
     }
+
+    suspend fun deleteFavouriteCity(favouriteCity: FavouriteCity) {
+        forecastDao.deleteFavouriteCity(favouriteCity)
+    }
 }

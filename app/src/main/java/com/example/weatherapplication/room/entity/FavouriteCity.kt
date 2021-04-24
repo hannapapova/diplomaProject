@@ -10,5 +10,6 @@ data class FavouriteCity(
     val adminName1: String,
     val countryName: String,
     val latitude: String,
-    val longitude: String
+    val longitude: String,
+    var inFavourites: Boolean = true
 )

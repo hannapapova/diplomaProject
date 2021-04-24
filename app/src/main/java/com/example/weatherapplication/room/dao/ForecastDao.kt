@@ -1,10 +1,7 @@
 package com.example.weatherapplication.room.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.example.weatherapplication.room.entity.*
 
 @Dao
@@ -51,4 +48,7 @@ interface ForecastDao {
 
     @Query("DELETE FROM current_city_table")
     suspend fun deleteCurrentCityTable()
+
+    @Delete
+    suspend fun deleteFavouriteCity(favouriteCity: FavouriteCity)
 }
