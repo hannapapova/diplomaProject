@@ -83,7 +83,7 @@ class HomeFragment : Fragment() {
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
         viewModel.currentCity.observe(viewLifecycleOwner, {
-            title.text = it?.name ?: "wait"
+            title.text = it?.name ?: viewModel.city.name
         })
 
         viewModel.currentWeather.observe(viewLifecycleOwner, {

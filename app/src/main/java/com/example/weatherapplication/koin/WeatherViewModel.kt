@@ -28,7 +28,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var favouriteCities: LiveData<List<FavouriteCity>>
     var selectedCity = MutableLiveData<Geoname>()
     var suitableCities = MutableLiveData<MutableList<Geoname>>()
-    var city = CurrentCity("", "", "", "77.000356", "-42.658429")
+    var city = CurrentCity("Greenland", "", "", "77.000356", "-42.658429")
     var latitude: Float = 0F
     var longitude: Float = 0F
 
