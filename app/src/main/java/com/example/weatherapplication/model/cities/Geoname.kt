@@ -10,4 +10,5 @@ data class Geoname(
     @field:Json(name = "lng")
     val longitude: String,
     val name: String,
+    var inFavourites: Boolean = false
 )

@@ -35,6 +35,8 @@ class SearchFragment : Fragment() {
         setupBar(key, toolbar)
         setupBarActions(key, view, toolbar)
 
+        viewModel.favouriteCities.value?.let { viewModel.deleteNotFavouritesFromDB(it) }
+
         return view
     }
 
@@ -66,5 +68,13 @@ class SearchFragment : Fragment() {
             .subscribe { text ->
                 viewModel.getCitiesResult(text)
             }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.suitableCities.value?.forEach { suitable ->
+            if (suitable.inFavourites)
+                viewModel.putSelectedIntoFavouritesDB(suitable)
+        }
     }
 }

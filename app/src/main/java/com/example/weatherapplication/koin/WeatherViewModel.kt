@@ -45,15 +45,23 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         selectedCity.value = city
     }
 
-    fun putSelectedIntoFavouritesDB() {
+    fun putSelectedIntoFavouritesDB(geoName: Geoname = selectedCity.value!!) {
         val city = FavouriteCity(
-            selectedCity.value!!.name,
-            selectedCity.value!!.adminName1,
-            selectedCity.value!!.countryName,
-            selectedCity.value!!.latitude,
-            selectedCity.value!!.longitude
+            geoName.name,
+            geoName.adminName1,
+            geoName.countryName,
+            geoName.latitude,
+            geoName.longitude
         )
         insertFavouriteCity(city)
+        favouriteCities = repository.favouriteCities
+    }
+
+    fun deleteNotFavouritesFromDB(cities: List<FavouriteCity>) {
+        for (city in cities) {
+            if (!city.inFavourites)
+                deleteFavouriteCity(city)
+        }
         favouriteCities = repository.favouriteCities
     }
 
@@ -70,7 +78,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         currentCity = repository.savedCurrentCity
     }
 
-    fun getCoordinatesOfCity(city: CurrentCity) {
+    private fun getCoordinatesOfCity(city: CurrentCity) {
         latitude = city.latitude.toFloat()
         longitude = city.longitude.toFloat()
     }
@@ -190,7 +198,19 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
             ) {
                 if (response.isSuccessful) {
                     val responseBody: ResponseCity = response.body()!!
-                    suitableCities.value = responseBody.geonames as MutableList
+//                    suitableCities.value = responseBody.geonames as MutableList
+                    val list = mutableListOf<Geoname>()
+                    for (location in responseBody.geonames) {
+                        if (location.name != null && location.name != "" &&
+                            location.adminName1 != null && location.adminName1 != "" &&
+                            location.countryName != null && location.countryName != "" &&
+                            location.latitude != null && location.latitude != "" &&
+                            location.longitude != null && location.longitude != ""
+                        ) {
+                            list.add(location)
+                        }
+                    }
+                    suitableCities.value = list
                 } else {
                     Log.d("viewmodel", "on response, but not successful")
                     Log.d("viewmodel", response.errorBody().toString())
@@ -251,6 +271,12 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     fun deleteCurrentCityTable() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteCurrentCityTable()
+        }
+    }
+
+    fun deleteFavouriteCity(favouriteCity: FavouriteCity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteFavouriteCity(favouriteCity)
         }
     }
     //endregion

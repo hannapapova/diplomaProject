@@ -14,7 +14,7 @@ import com.example.weatherapplication.room.entity.*
         SavedDailyWeather::class,
         CurrentCity::class,
         FavouriteCity::class],
-    version = 5,
+    version = 7,
     exportSchema = false
 )
 abstract class ForecastDatabase : RoomDatabase() {

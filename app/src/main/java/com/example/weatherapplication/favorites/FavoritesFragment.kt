@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
+import com.example.weatherapplication.adapter.FavouriteCitiesAdapter
 import com.example.weatherapplication.koin.WeatherViewModel
 import kotlinx.android.synthetic.main.fragment_favorites.*
 import org.koin.android.ext.android.inject
@@ -29,6 +30,7 @@ class FavoritesFragment : Fragment() {
         setupBackgroundColor(view)
         setupBar(key, toolbar)
         setupBarActions(key, view, toolbar)
+
         return view
     }
 
@@ -41,11 +43,18 @@ class FavoritesFragment : Fragment() {
         }
 
         viewModel.favouriteCities.observe(viewLifecycleOwner, {
-            tv_city_favourites.text = "Favourite: " + it?.toString() ?: "wait"
+            recycler_favourites.adapter = FavouriteCitiesAdapter(it, viewModel)
         })
 
         viewModel.currentCity.observe(viewLifecycleOwner, {
-            tv_current.text = "Current: " + it?.toString() ?: "wait"
+            val selectedLocationName =
+                "${it?.name ?: "wait"}, ${it?.adminName1 ?: "wait"}, ${it?.countryName ?: "wait"}"
+            tv_city_selected.text = selectedLocationName
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.favouriteCities.value?.let { viewModel.deleteNotFavouritesFromDB(it) }
     }
 }
