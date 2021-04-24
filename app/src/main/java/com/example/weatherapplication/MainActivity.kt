@@ -179,8 +179,6 @@ internal fun setupBarActions(key: String, view: View, toolbar: Toolbar?) {
         "FAVORITES" -> {
             toolbar?.setNavigationOnClickListener {
                 Navigation.findNavController(view).popBackStack()
-//                Navigation.findNavController(view)
-//                    .navigate(R.id.action_favoritesFragment_to_homeFragment)
             }
             toolbar?.setOnMenuItemClickListener {
                 Navigation.findNavController(view)

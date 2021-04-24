@@ -27,7 +27,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var currentCity: LiveData<CurrentCity>
     var favouriteCities: LiveData<List<FavouriteCity>>
     var selectedCity = MutableLiveData<Geoname>()
-    var suitableCities = MutableLiveData<List<Geoname>>()
+    var suitableCities = MutableLiveData<MutableList<Geoname>>()
     var latitude: Float = 53.893009F
     var longitude: Float = 27.567444F
 
@@ -183,13 +183,14 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
             override fun onFailure(call: Call<ResponseCity>, t: Throwable) {
                 Log.d("viewmodel", t.message.toString())
             }
+
             override fun onResponse(
                 call: Call<ResponseCity>,
                 response: retrofit2.Response<ResponseCity>
             ) {
                 if (response.isSuccessful) {
                     val responseBody: ResponseCity = response.body()!!
-                    suitableCities.value = responseBody.geonames
+                    suitableCities.value = responseBody.geonames as MutableList
                 } else {
                     Log.d("viewmodel", "on response, but not successful")
                     Log.d("viewmodel", response.errorBody().toString())

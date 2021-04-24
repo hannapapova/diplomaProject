@@ -41,6 +41,8 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        viewModel.suitableCities.value?.clear()
+
         viewModel.suitableCities.observe(viewLifecycleOwner, {
             recycler_cities.adapter = CitiesAdapter(it, viewModel)
         })
