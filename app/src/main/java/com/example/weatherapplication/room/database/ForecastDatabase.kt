@@ -5,14 +5,18 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.weatherapplication.room.dao.ForecastDao
+import com.example.weatherapplication.room.entity.CurrentCity
 import com.example.weatherapplication.room.entity.SavedCurrentWeather
 import com.example.weatherapplication.room.entity.SavedDailyWeather
 import com.example.weatherapplication.room.entity.SavedHourlyWeather
 
-
 @Database(
-    entities = [SavedCurrentWeather::class, SavedHourlyWeather::class, SavedDailyWeather::class],
-    version = 3,
+    entities = [
+        SavedCurrentWeather::class,
+        SavedHourlyWeather::class,
+        SavedDailyWeather::class,
+        CurrentCity::class],
+    version = 4,
     exportSchema = false
 )
 abstract class ForecastDatabase : RoomDatabase() {

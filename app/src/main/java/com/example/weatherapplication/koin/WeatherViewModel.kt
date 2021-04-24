@@ -12,6 +12,7 @@ import com.example.weatherapplication.model.cities.ResponseCity
 import com.example.weatherapplication.model.forecast.Response
 import com.example.weatherapplication.room.database.ForecastDatabase
 import com.example.weatherapplication.room.database.ForecastRepository
+import com.example.weatherapplication.room.entity.CurrentCity
 import com.example.weatherapplication.room.entity.SavedCurrentWeather
 import com.example.weatherapplication.room.entity.SavedDailyWeather
 import com.example.weatherapplication.room.entity.SavedHourlyWeather
@@ -26,6 +27,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var currentWeather: LiveData<SavedCurrentWeather>
     var hourlyWeather: LiveData<List<SavedHourlyWeather>>
     var dailyWeather: LiveData<List<SavedDailyWeather>>
+    var currentCity: LiveData<CurrentCity>
     var cities = MutableLiveData<List<Geoname>>()
     var latitude: Float = 53.893009F
     var longitude: Float = 27.567444F
@@ -47,6 +49,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         currentWeather = repository.savedCurrentWeather
         hourlyWeather = repository.savedHourlyWeather
         dailyWeather = repository.savedDailyWeather
+        currentCity = repository.savedCurrentCity
     }
 
     fun newCoord(geoname: Geoname) {
@@ -221,6 +224,12 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
+    fun insertCurrentCity(currentCity: CurrentCity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.insertCurrentCity(currentCity)
+        }
+    }
+
     fun deleteCurrentWeatherTable() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteCurrentWeatherTable()
@@ -236,6 +245,12 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     fun deleteDailyWeatherTable() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteDailyWeatherTable()
+        }
+    }
+
+    fun deleteCurrentCityTable() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.deleteCurrentCityTable()
         }
     }
     //endregion

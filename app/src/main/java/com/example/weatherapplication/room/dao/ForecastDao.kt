@@ -5,6 +5,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.weatherapplication.room.entity.CurrentCity
 import com.example.weatherapplication.room.entity.SavedCurrentWeather
 import com.example.weatherapplication.room.entity.SavedDailyWeather
 import com.example.weatherapplication.room.entity.SavedHourlyWeather
@@ -21,6 +22,9 @@ interface ForecastDao {
     @Query("SELECT * FROM daily_weather_table")
     fun loadDailyWeather(): LiveData<List<SavedDailyWeather>>
 
+    @Query("SELECT * FROM current_city_table")
+    fun loadCurrentCity(): LiveData<CurrentCity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrentWeather(currentWeather: SavedCurrentWeather)
 
@@ -30,6 +34,9 @@ interface ForecastDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertDailyWeatherList(dailyWeather: List<SavedDailyWeather>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCurrentCity(currentCity: CurrentCity)
+
     @Query("DELETE FROM current_weather_table")
     suspend fun deleteCurrentWeatherTable()
 
@@ -38,4 +45,7 @@ interface ForecastDao {
 
     @Query("DELETE FROM daily_weather_table")
     suspend fun deleteDailyWeatherTable()
+
+    @Query("DELETE FROM current_city_table")
+    suspend fun deleteCurrentCityTable()
 }
