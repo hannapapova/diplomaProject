@@ -41,11 +41,11 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         favouriteCities = repository.favouriteCities
     }
 
-    fun putSelectedCity(city: Geoname) {
+    fun setSelectedCity(city: Geoname) {
         selectedCity.value = city
     }
 
-    fun putSelectedIntoFavourites() {
+    fun putSelectedIntoFavouritesDB() {
         val city = FavouriteCity(
             selectedCity.value!!.name,
             selectedCity.value!!.adminName1,
@@ -57,7 +57,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         favouriteCities = repository.favouriteCities
     }
 
-    fun putSelectedIntoRepo() {
+    fun setSelectedAsCurrent() {
         deleteCurrentCityTable()
         val city = CurrentCity(
             selectedCity.value!!.name,
@@ -70,13 +70,13 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         currentCity = repository.savedCurrentCity
     }
 
-    fun newCoord(city: CurrentCity) {
+    fun getCoordinatesOfCity(city: CurrentCity) {
         latitude = city.latitude.toFloat()
         longitude = city.longitude.toFloat()
     }
 
-    fun getResult(city: CurrentCity) {
-        newCoord(city)
+    fun getForecast(city: CurrentCity) {
+        getCoordinatesOfCity(city)
         RetrofitInstance.weatherApi.getWeather(latitude, longitude, "metric")
             .enqueue(object :
                 Callback<Response> {

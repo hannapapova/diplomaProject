@@ -11,16 +11,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.weatherapplication.*
 import com.example.weatherapplication.adapter.DailyAdapter
 import com.example.weatherapplication.adapter.HourlyAdapter
-import com.example.weatherapplication.favorites.FavoritesFragmentDirections
 import com.example.weatherapplication.koin.WeatherViewModel
-import com.example.weatherapplication.model.cities.Geoname
 import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -41,7 +37,7 @@ class HomeFragment : Fragment() {
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val window = requireActivity().window
 
-        viewModel.currentCity.value?.let { viewModel.getResult(it) }
+        viewModel.currentCity.value?.let { viewModel.getForecast(it) }
         setupTitle(title, key)
         setupToolBarBackgroundColor(toolbar, requireContext())
         setupBackgroundColor(view)
@@ -61,7 +57,7 @@ class HomeFragment : Fragment() {
         setupRecyclers()
 
         refreshLayout.setOnRefreshListener {
-            viewModel.currentCity.value?.let { viewModel.getResult(it) }
+            viewModel.currentCity.value?.let { viewModel.getForecast(it) }
             refreshLayout.isRefreshing = false
         }
     }

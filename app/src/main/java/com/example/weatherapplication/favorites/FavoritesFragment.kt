@@ -1,7 +1,6 @@
 package com.example.weatherapplication.favorites
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,8 +36,8 @@ class FavoritesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (viewModel.selectedCity.value != null) {
-            viewModel.putSelectedIntoRepo()
-            viewModel.putSelectedIntoFavourites()
+            viewModel.setSelectedAsCurrent()
+            viewModel.putSelectedIntoFavouritesDB()
         }
 
         viewModel.favouriteCities.observe(viewLifecycleOwner, {

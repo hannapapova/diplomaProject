@@ -1,6 +1,5 @@
 package com.example.weatherapplication.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
 import com.example.weatherapplication.koin.WeatherViewModel
 import com.example.weatherapplication.model.cities.Geoname
-import com.example.weatherapplication.room.entity.CurrentCity
 import kotlinx.android.synthetic.main.city_row.view.*
 
 class CitiesAdapter(private val citiesList: List<Geoname>, val viewModel: WeatherViewModel) :
@@ -32,7 +30,7 @@ class CitiesAdapter(private val citiesList: List<Geoname>, val viewModel: Weathe
         holder.location.text = locationName
 
         holder.itemView.setOnClickListener {
-            viewModel.putSelectedCity(geoName)
+            viewModel.setSelectedCity(geoName)
             Navigation.findNavController(holder.itemView).popBackStack()
         }
     }
