@@ -18,20 +18,13 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/tv_hourly"
+            android:id="@+id/tv_city_favourites"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/tv_daily"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
 
     </LinearLayout>
 

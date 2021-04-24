@@ -37,14 +37,13 @@ class HomeFragment : Fragment() {
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val window = requireActivity().window
 
-        viewModel.getResult()
+        viewModel.currentCity.value?.let { viewModel.getForecast(it) }
         setupTitle(title, key)
         setupToolBarBackgroundColor(toolbar, requireContext())
         setupBackgroundColor(view)
         setupStatusBarColor(window, requireContext())
         setupBar(key, toolbar)
         setupBarActions(key, view, toolbar)
-
         return view
     }
 
@@ -58,7 +57,7 @@ class HomeFragment : Fragment() {
         setupRecyclers()
 
         refreshLayout.setOnRefreshListener {
-            viewModel.getResult()
+            viewModel.currentCity.value?.let { viewModel.getForecast(it) }
             refreshLayout.isRefreshing = false
         }
     }
@@ -83,8 +82,11 @@ class HomeFragment : Fragment() {
         val sunriseSunsetDateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
+        viewModel.currentCity.observe(viewLifecycleOwner, {
+            title.text = it?.name ?: "wait"
+        })
+
         viewModel.currentWeather.observe(viewLifecycleOwner, {
-            title.text = it?.timezone ?: "wait"
             status.text = it?.weatherDescription?.capitalize(Locale.ENGLISH) ?: "wait"
             temperature.text = convertTemperature(
                 it?.temperature,

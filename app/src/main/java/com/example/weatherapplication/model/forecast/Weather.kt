@@ -1,4 +1,4 @@
-package com.example.weatherapplication.model
+package com.example.weatherapplication.model.forecast
 
 data class Weather(
     val id: Int,

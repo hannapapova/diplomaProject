@@ -1,10 +1,12 @@
-package com.example.weatherapplication.model
+package com.example.weatherapplication.model.forecast
 
 import com.squareup.moshi.Json
 
-data class HourlyWeather(
+data class CurrentWeather(
     @field:Json(name = "dt")
     val dateTime: Int,
+    val sunrise: Int,
+    val sunset: Int,
     @field:Json(name = "temp")
     val temperature: Float,
     @field:Json(name = "feels_like")
@@ -13,19 +15,17 @@ data class HourlyWeather(
     val humidity: Int,
     @field:Json(name = "dew_point")
     val dewPoint: Float,
+    val clouds: Int,
     @field:Json(name = "uvi")
     val uvIndex: Float,
-    val clouds: Int,
     val visibility: Int,
     @field:Json(name = "wind_speed")
     val windSpeed: Float,
-    @field:Json(name = "wind_deg")
-    val windDirection: Int,
     @field:Json(name = "wind_gust")
     val windGust: Float,
-    @field:Json(name = "pop")
-    val probabilityOfPrecipitation: Float,
-    val rain: Rain,
-    val snow: Snow,
+    @field:Json(name = "wind_deg")
+    val windDirection: Int,
+    val rain: Rain?,
+    val snow: Snow?,
     val weather: List<Weather>
 )

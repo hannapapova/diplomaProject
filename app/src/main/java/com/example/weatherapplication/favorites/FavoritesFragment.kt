@@ -8,13 +8,13 @@ import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
-import com.example.weatherapplication.setupBackgroundColor
-import com.example.weatherapplication.setupBar
-import com.example.weatherapplication.setupBarActions
-import com.example.weatherapplication.setupTitle
+import com.example.weatherapplication.koin.WeatherViewModel
+import kotlinx.android.synthetic.main.fragment_favorites.*
+import org.koin.android.ext.android.inject
 
 class FavoritesFragment : Fragment() {
     private val key = "FAVORITES"
+    private val viewModel by inject<WeatherViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,7 +29,23 @@ class FavoritesFragment : Fragment() {
         setupBackgroundColor(view)
         setupBar(key, toolbar)
         setupBarActions(key, view, toolbar)
-
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        if (viewModel.selectedCity.value != null) {
+            viewModel.setSelectedAsCurrent()
+            viewModel.putSelectedIntoFavouritesDB()
+        }
+
+        viewModel.favouriteCities.observe(viewLifecycleOwner, {
+            tv_city_favourites.text = "Favourite: " + it?.toString() ?: "wait"
+        })
+
+        viewModel.currentCity.observe(viewLifecycleOwner, {
+            tv_current.text = "Current: " + it?.toString() ?: "wait"
+        })
     }
 }
