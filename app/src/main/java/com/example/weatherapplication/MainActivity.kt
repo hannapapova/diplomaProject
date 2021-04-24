@@ -5,6 +5,7 @@ import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
@@ -20,8 +21,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.Navigation
 import com.example.weatherapplication.koin.WeatherViewModel
+import com.example.weatherapplication.room.entity.CurrentCity
 import com.google.android.gms.location.*
 import org.koin.android.ext.android.inject
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -86,9 +89,7 @@ class MainActivity : AppCompatActivity() {
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
-            val location = p0.lastLocation
-            viewModel.latitude = p0.lastLocation.latitude.toFloat()
-            viewModel.longitude = p0.lastLocation.longitude.toFloat()
+            viewModel.city = createCurrentCity(p0.lastLocation.latitude, p0.lastLocation.longitude)
         }
     }
 
@@ -108,8 +109,7 @@ class MainActivity : AppCompatActivity() {
                     if (location == null) {
                         getNewLocation()
                     } else {
-                        viewModel.latitude = it.result.latitude.toFloat()
-                        viewModel.longitude = it.result.longitude.toFloat()
+                        viewModel.city = createCurrentCity(it.result.latitude, it.result.longitude)
                     }
                 }
             } else {
@@ -131,6 +131,18 @@ class MainActivity : AppCompatActivity() {
                 Log.i("location", "Permission granted!")
             }
         }
+    }
+
+    private fun createCurrentCity(latitude: Double, longitude: Double): CurrentCity {
+        val geoCoder = Geocoder(applicationContext, Locale.ENGLISH)
+        val list = geoCoder.getFromLocation(latitude, longitude, 1)
+        return CurrentCity(
+            list[0].locality,
+            list[0].adminArea,
+            list[0].countryName,
+            latitude.toString(),
+            longitude.toString()
+        )
     }
 }
 
