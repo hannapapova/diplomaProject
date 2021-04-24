@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.weatherapplication.R
+import com.example.weatherapplication.fragmentHideKeyboard
 import com.example.weatherapplication.koin.WeatherViewModel
 import com.example.weatherapplication.model.cities.Geoname
 import kotlinx.android.synthetic.main.city_row.view.*
@@ -50,11 +51,13 @@ class CitiesAdapter(
 
         holder.itemView.setOnClickListener {
             viewModel.setSelectedCity(geoName)
+            fragmentHideKeyboard(holder.itemView.context, holder.itemView)
             Navigation.findNavController(holder.itemView).popBackStack()
         }
 
         holder.itemView.iv_star_city.setOnClickListener {
             geoName.inFavourites = !geoName.inFavourites
+            fragmentHideKeyboard(holder.itemView.context, holder.itemView)
             it.setBackgroundResource(setImageView(geoName))
         }
     }

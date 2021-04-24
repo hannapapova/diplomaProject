@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
 import com.example.weatherapplication.adapter.FavouriteCitiesAdapter
 import com.example.weatherapplication.koin.WeatherViewModel
+import com.example.weatherapplication.model.cities.Geoname
 import kotlinx.android.synthetic.main.fragment_favorites.*
 import org.koin.android.ext.android.inject
 
@@ -46,8 +47,8 @@ class FavoritesFragment : Fragment() {
         })
 
         viewModel.currentCity.observe(viewLifecycleOwner, {
-            val selectedLocationName =
-                "${it?.name ?: "wait"}, ${it?.adminName1 ?: "wait"}, ${it?.countryName ?: "wait"}"
+            val selectedLocationName: String = if (it != null)
+                "${it?.name}, ${it?.adminName1}, ${it?.countryName}"  else ""
             tv_city_selected.text = selectedLocationName
         })
     }

@@ -1,6 +1,7 @@
 package com.example.weatherapplication
 
 import android.Manifest
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
@@ -11,6 +12,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -238,4 +240,10 @@ internal fun setupBackgroundColor(view: View) {
 internal fun setupToolBarBackgroundColor(toolbar: Toolbar?, context: Context) {
     //TODO Set color depending on weather status
     toolbar?.setBackgroundColor(ContextCompat.getColor(context, R.color.end_color_sunny))
+}
+
+internal fun fragmentHideKeyboard(context: Context, view: View) {
+    val inputMethodManager: InputMethodManager =
+        context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
 }
