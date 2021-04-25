@@ -63,9 +63,4 @@ class FavoritesFragment : Fragment() {
         super.onPause()
         viewModel.favouriteCities.value?.let { viewModel.deleteNotFavouritesFromDB(it) }
     }
-
-    override fun onPause() {
-        super.onPause()
-        viewModel.favouriteCities.value?.let { viewModel.deleteNotFavouritesFromDB(it) }
-    }
 }
