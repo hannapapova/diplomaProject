@@ -54,7 +54,7 @@ class HomeFragment : Fragment() {
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val window = requireActivity().window
-
+      
         if (viewModel.selectedCity.value != null) {
             viewModel.setSelectedAsGPS()
         }
