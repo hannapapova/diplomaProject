@@ -21,25 +21,25 @@ import retrofit2.Callback
 class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
     val repository: ForecastRepository
-    var currentWeather: LiveData<SavedCurrentWeather>
-    var hourlyWeather: LiveData<List<SavedHourlyWeather>>
-    var dailyWeather: LiveData<List<SavedDailyWeather>>
+    lateinit var currentWeather: LiveData<SavedCurrentWeather>
+    lateinit var hourlyWeather: LiveData<List<SavedHourlyWeather>>
+    lateinit var dailyWeather: LiveData<List<SavedDailyWeather>>
     var currentCity: LiveData<CurrentCity>
     var favouriteCities: LiveData<List<FavouriteCity>>
     var selectedCity = MutableLiveData<Geoname>()
     var suitableCities = MutableLiveData<MutableList<Geoname>>()
     var cityGps = MutableLiveData<CurrentCity>()
-
-    //    var city = CurrentCity("Greenland", "", "", "77.000356", "-42.658429")
     var latitude: Float = 0F
     var longitude: Float = 0F
 
     init {
         val forecastDao = ForecastDatabase.getDatabase(application).forecastDao()
         repository = ForecastRepository(forecastDao)
-        currentWeather = repository.savedCurrentWeather
-        hourlyWeather = repository.savedHourlyWeather
-        dailyWeather = repository.savedDailyWeather
+        viewModelScope.launch(Dispatchers.IO) {
+            currentWeather = repository.savedCurrentWeather()
+            hourlyWeather = repository.savedHourlyWeather()
+            dailyWeather = repository.savedDailyWeather()
+        }
         currentCity = repository.savedCurrentCity
         favouriteCities = repository.favouriteCities
     }
@@ -201,9 +201,11 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                         insertDailyWeatherList(newDailyWeatherList)
                         //endregion
 
-                        currentWeather = repository.savedCurrentWeather
-                        hourlyWeather = repository.savedHourlyWeather
-                        dailyWeather = repository.savedDailyWeather
+                        viewModelScope.launch(Dispatchers.IO) {
+                            currentWeather = repository.savedCurrentWeather()
+                            hourlyWeather = repository.savedHourlyWeather()
+                            dailyWeather = repository.savedDailyWeather()
+                        }
 
                     } else {
                         Log.d("viewmodel", "on response, but not successful")
@@ -225,7 +227,6 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
             ) {
                 if (response.isSuccessful) {
                     val responseBody: ResponseCity = response.body()!!
-//                    suitableCities.value = responseBody.geonames as MutableList
                     val list = mutableListOf<Geoname>()
                     for (location in responseBody.geonames) {
                         if (location.name != null && location.name != "" &&
@@ -265,13 +266,13 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun insertCurrentCity(city: CurrentCity) {
+    private fun insertCurrentCity(city: CurrentCity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertCurrentCity(city)
         }
     }
 
-    fun insertFavouriteCity(city: FavouriteCity) {
+    private fun insertFavouriteCity(city: FavouriteCity) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertFavouriteCity(city)
         }
@@ -295,7 +296,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun deleteCurrentCityTable() {
+    private fun deleteCurrentCityTable() {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteCurrentCityTable()
         }

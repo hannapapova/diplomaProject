@@ -3,10 +3,13 @@ package com.example.weatherapplication.home
 import android.Manifest
 import android.app.Application
 import android.content.Context
+import android.content.Context.CONNECTIVITY_SERVICE
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -32,6 +35,7 @@ import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class HomeFragment : Fragment() {
     private val key = "HOME"
     private val viewModel by inject<WeatherViewModel>()
@@ -50,8 +54,6 @@ class HomeFragment : Fragment() {
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val window = requireActivity().window
-
-//        viewModel.currentCity.value?.let { viewModel.getForecast(it) }
 
         if (viewModel.selectedCity.value != null) {
             viewModel.setSelectedAsGPS()
@@ -83,7 +85,6 @@ class HomeFragment : Fragment() {
         }
 
         refreshLayout.setOnRefreshListener {
-//            viewModel.currentCity.value?.let { viewModel.getForecast(it) }
             if (sharedPreferences.getBoolean("LOCATION", true)) {
                 getLastLocation()
             }
@@ -115,13 +116,15 @@ class HomeFragment : Fragment() {
         val sunriseSunsetDateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
-//        if (viewModel.selectedCity.value != null) {
-//            viewModel.setSelectedAsGPS()
-//        }
-
-        viewModel.cityGps.observe(viewLifecycleOwner, {
-            title.text = viewModel.selectedCity.value?.name ?: it?.name
-        })
+        if (!isConnected(requireContext())) {
+            viewModel.currentCity.observe(viewLifecycleOwner, {
+                title.text = it?.name ?: "No Internet connection"
+            })
+        } else {
+            viewModel.cityGps.observe(viewLifecycleOwner, {
+                title.text = viewModel.selectedCity.value?.name ?: it?.name
+            })
+        }
 
         viewModel.currentWeather.observe(viewLifecycleOwner, {
             status.text = it?.weatherDescription?.capitalize(Locale.ENGLISH) ?: "wait"
@@ -343,4 +346,15 @@ internal fun convertPressure(pressure: Int, sharedPrefs: Int): String {
         R.id.atm_mmHg -> pressure.div(1.333).toInt().toString().plus(" mmHg")
         else -> "Error"
     }
+}
+
+internal fun isConnected(context: Context): Boolean {
+    val cm = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+    val capabilities =
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            cm.getNetworkCapabilities(cm.activeNetwork)
+        } else {
+            TODO("VERSION.SDK_INT < M")
+        }
+    return capabilities?.hasCapability(NET_CAPABILITY_INTERNET) == true
 }
