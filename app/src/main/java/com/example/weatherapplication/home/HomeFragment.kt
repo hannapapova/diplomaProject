@@ -53,6 +53,10 @@ class HomeFragment : Fragment() {
 
 //        viewModel.currentCity.value?.let { viewModel.getForecast(it) }
 
+        if (viewModel.selectedCity.value != null) {
+            viewModel.setSelectedAsGPS()
+        }
+
         viewModel.cityGps.value?.let { viewModel.getForecast(it) }
 
         setupTitle(title, key)
@@ -83,6 +87,9 @@ class HomeFragment : Fragment() {
             if (sharedPreferences.getBoolean("LOCATION", true)) {
                 getLastLocation()
             }
+            if (viewModel.selectedCity.value != null) {
+                viewModel.setSelectedAsGPS()
+            }
             viewModel.cityGps.value?.let { viewModel.getForecast(it) }
             refreshLayout.isRefreshing = false
         }
@@ -108,8 +115,12 @@ class HomeFragment : Fragment() {
         val sunriseSunsetDateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
 
-        viewModel.cityGps.observe(viewLifecycleOwner,{
-            title.text = it?.name ?: viewModel.city.name
+//        if (viewModel.selectedCity.value != null) {
+//            viewModel.setSelectedAsGPS()
+//        }
+
+        viewModel.cityGps.observe(viewLifecycleOwner, {
+            title.text = viewModel.selectedCity.value?.name ?: it?.name
         })
 
         viewModel.currentWeather.observe(viewLifecycleOwner, {
@@ -234,7 +245,8 @@ class HomeFragment : Fragment() {
 
     private val locationCallback = object : LocationCallback() {
         override fun onLocationResult(p0: LocationResult) {
-            viewModel.cityGps.value = createCurrentCity(p0.lastLocation.latitude, p0.lastLocation.longitude)
+            viewModel.cityGps.value =
+                createCurrentCity(p0.lastLocation.latitude, p0.lastLocation.longitude)
         }
     }
 
@@ -254,7 +266,8 @@ class HomeFragment : Fragment() {
                     if (location == null) {
                         getNewLocation()
                     } else {
-                        viewModel.cityGps.value = createCurrentCity(it.result.latitude, it.result.longitude)
+                        viewModel.cityGps.value =
+                            createCurrentCity(it.result.latitude, it.result.longitude)
                     }
                 }
             } else {

@@ -29,7 +29,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     var selectedCity = MutableLiveData<Geoname>()
     var suitableCities = MutableLiveData<MutableList<Geoname>>()
     var cityGps = MutableLiveData<CurrentCity>()
-    var city = CurrentCity("Greenland", "", "", "77.000356", "-42.658429")
+
+    //    var city = CurrentCity("Greenland", "", "", "77.000356", "-42.658429")
     var latitude: Float = 0F
     var longitude: Float = 0F
 
@@ -43,8 +44,32 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         favouriteCities = repository.favouriteCities
     }
 
+    fun geoNameToCurrentCity(geoName: Geoname): CurrentCity {
+        return CurrentCity(
+            geoName.name,
+            geoName.adminName1,
+            geoName.countryName,
+            geoName.latitude,
+            geoName.longitude
+        )
+    }
+
+    fun setSelectedAsGPS() {
+        cityGps.value = geoNameToCurrentCity(selectedCity.value!!)
+    }
+
     fun setSelectedCity(city: Geoname) {
         selectedCity.value = city
+    }
+
+    fun setGPSAsSelected() {
+        selectedCity.value = Geoname(
+            cityGps.value?.adminName1!!,
+            cityGps.value?.countryName!!,
+            cityGps.value?.latitude!!,
+            cityGps.value?.longitude!!,
+            cityGps.value?.name!!
+        )
     }
 
     fun putSelectedIntoFavouritesDB(geoName: Geoname = selectedCity.value!!) {
