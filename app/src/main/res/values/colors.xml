@@ -19,4 +19,5 @@
     <color name="start_color_storm">#02021B</color>
     <color name="end_color_neutral">#009AE2</color>
     <color name="start_color_neutral">#B084CF</color>
+    <color name="checkbox_color">#BFF0D4</color>
 </resources>
