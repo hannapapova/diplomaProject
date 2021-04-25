@@ -1,15 +1,19 @@
 package com.example.weatherapplication.room.database
 
+import androidx.lifecycle.LiveData
 import com.example.weatherapplication.room.dao.ForecastDao
 import com.example.weatherapplication.room.entity.*
 
 class ForecastRepository(private val forecastDao: ForecastDao) {
 
-    val savedCurrentWeather = forecastDao.loadCurrentWeather()
+    fun savedCurrentWeather(): LiveData<SavedCurrentWeather> =
+        forecastDao.loadCurrentWeather()
 
-    val savedHourlyWeather = forecastDao.loadHourlyWeather()
+    fun savedHourlyWeather(): LiveData<List<SavedHourlyWeather>> =
+        forecastDao.loadHourlyWeather()
 
-    val savedDailyWeather = forecastDao.loadDailyWeather()
+    fun savedDailyWeather(): LiveData<List<SavedDailyWeather>> =
+        forecastDao.loadDailyWeather()
 
     val savedCurrentCity = forecastDao.loadCurrentCity()
 

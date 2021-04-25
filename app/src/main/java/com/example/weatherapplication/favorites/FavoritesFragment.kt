@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
 import com.example.weatherapplication.adapter.FavouriteCitiesAdapter
+import com.example.weatherapplication.home.isConnected
 import com.example.weatherapplication.koin.WeatherViewModel
 import com.example.weatherapplication.model.cities.Geoname
 import kotlinx.android.synthetic.main.fragment_favorites.*
@@ -39,17 +40,28 @@ class FavoritesFragment : Fragment() {
 
         if (viewModel.selectedCity.value != null) {
             viewModel.setSelectedAsCurrent()
+        } else {
+            if (isConnected(requireContext())) {
+                viewModel.setGPSAsSelected()
+            }
         }
 
         viewModel.favouriteCities.observe(viewLifecycleOwner, {
             recycler_favourites.adapter = FavouriteCitiesAdapter(it, viewModel)
         })
 
-        viewModel.currentCity.observe(viewLifecycleOwner, {
+        viewModel.selectedCity.observe(viewLifecycleOwner, {
             val selectedLocationName: String = if (it != null)
-                "${it?.name}, ${it?.adminName1}, ${it?.countryName}"  else ""
+                "${it?.name}, ${it?.adminName1}, ${it?.countryName}" else ""
             tv_city_selected.text = selectedLocationName
         })
+
+        viewModel.currentCity.observe(viewLifecycleOwner, {})
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.favouriteCities.value?.let { viewModel.deleteNotFavouritesFromDB(it) }
     }
 
     override fun onPause() {
