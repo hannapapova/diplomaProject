@@ -35,6 +35,7 @@ import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 class HomeFragment : Fragment() {
     private val key = "HOME"
     private val viewModel by inject<WeatherViewModel>()
@@ -107,10 +108,8 @@ class HomeFragment : Fragment() {
                 getLastLocation()
             }
             if (viewModel.selectedCity.value != null) {
-                Log.d("viewmodel", "selectedCity: " + viewModel.selectedCity.value)
                 viewModel.setSelectedAsGPS()
             }
-            Log.d("viewmodel", "cityGps: " + viewModel.cityGps.value)
             viewModel.cityGps.value?.let { viewModel.getForecast(it) }
             title.text = viewModel.cityGps.value?.name ?: ""
 

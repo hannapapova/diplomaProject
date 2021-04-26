@@ -81,7 +81,7 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
             currentCity.value?.name!!
         )
     }
-
+  
     fun putSelectedIntoFavouritesDB(geoName: Geoname = selectedCity.value!!) {
         val city = FavouriteCity(
             geoName.name,

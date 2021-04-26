@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import com.example.weatherapplication.*
 import com.example.weatherapplication.adapter.FavouriteCitiesAdapter
+import com.example.weatherapplication.home.isConnected
 import com.example.weatherapplication.koin.WeatherViewModel
 import kotlinx.android.synthetic.main.fragment_favorites.*
 import org.koin.android.ext.android.inject
