@@ -72,6 +72,16 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         )
     }
 
+    fun setCurrentAsSelected(){
+        selectedCity.value= Geoname(
+            currentCity.value?.adminName1!!,
+            currentCity.value?.countryName!!,
+            currentCity.value?.latitude!!,
+            currentCity.value?.longitude!!,
+            currentCity.value?.name!!
+        )
+    }
+  
     fun putSelectedIntoFavouritesDB(geoName: Geoname = selectedCity.value!!) {
         val city = FavouriteCity(
             geoName.name,
