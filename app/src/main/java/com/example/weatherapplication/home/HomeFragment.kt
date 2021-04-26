@@ -35,7 +35,6 @@ import org.koin.android.ext.android.inject
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class HomeFragment : Fragment() {
     private val key = "HOME"
     private val viewModel by inject<WeatherViewModel>()
@@ -54,7 +53,7 @@ class HomeFragment : Fragment() {
         val toolbar = requireActivity().findViewById<Toolbar>(R.id.toolbar)
         val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val window = requireActivity().window
-      
+
         if (viewModel.selectedCity.value != null) {
             viewModel.setSelectedAsGPS()
         }
@@ -71,11 +70,30 @@ class HomeFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         myApplication = requireActivity().application
         sharedPreferences = myApplication.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
         val refreshLayout =
             requireActivity().findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+
+        viewModel.currentCity.observe(viewLifecycleOwner, {})
+
+        if (!isConnected(requireContext())) {
+            viewModel.currentCity.observe(viewLifecycleOwner, {
+                title.text = it?.name ?: "No Internet connection"
+            })
+        } else {
+            if (viewModel.cityGps.value != null) {
+                viewModel.cityGps.observe(viewLifecycleOwner, {
+                    title.text = viewModel.selectedCity.value?.name ?: it?.name
+                })
+            } else {
+                viewModel.currentCity.observe(viewLifecycleOwner, {
+                    title.text = it?.name ?: "No Internet connection"
+                })
+            }
+        }
 
         setupObservers()
         setupRecyclers()
@@ -89,15 +107,18 @@ class HomeFragment : Fragment() {
                 getLastLocation()
             }
             if (viewModel.selectedCity.value != null) {
+                Log.d("viewmodel", "selectedCity: " + viewModel.selectedCity.value)
                 viewModel.setSelectedAsGPS()
             }
+            Log.d("viewmodel", "cityGps: " + viewModel.cityGps.value)
             viewModel.cityGps.value?.let { viewModel.getForecast(it) }
+            title.text = viewModel.cityGps.value?.name ?: ""
+
             refreshLayout.isRefreshing = false
         }
     }
 
     private fun setupObservers() {
-        val title = requireActivity().findViewById<TextView>(R.id.fragment_name)
         val status = requireActivity().findViewById<TextView>(R.id.status)
         val temperature = requireActivity().findViewById<TextView>(R.id.temperature)
         val humidity = requireActivity().findViewById<TextView>(R.id.humidity)
@@ -115,16 +136,6 @@ class HomeFragment : Fragment() {
 
         val sunriseSunsetDateFormat = SimpleDateFormat("HH:mm", Locale.ENGLISH)
         val currentDateFormat = SimpleDateFormat("EEEE, dd MMMM", Locale.ENGLISH)
-
-        if (!isConnected(requireContext())) {
-            viewModel.currentCity.observe(viewLifecycleOwner, {
-                title.text = it?.name ?: "No Internet connection"
-            })
-        } else {
-            viewModel.cityGps.observe(viewLifecycleOwner, {
-                title.text = viewModel.selectedCity.value?.name ?: it?.name
-            })
-        }
 
         viewModel.currentWeather.observe(viewLifecycleOwner, {
             status.text = it?.weatherDescription?.capitalize(Locale.ENGLISH) ?: "wait"
