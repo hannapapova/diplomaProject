@@ -21,9 +21,9 @@ import retrofit2.Callback
 class WeatherViewModel(application: Application) : AndroidViewModel(application) {
 
     val repository: ForecastRepository
-    lateinit var currentWeather: LiveData<SavedCurrentWeather>
-    lateinit var hourlyWeather: LiveData<List<SavedHourlyWeather>>
-    lateinit var dailyWeather: LiveData<List<SavedDailyWeather>>
+    var currentWeather: LiveData<SavedCurrentWeather>
+    var hourlyWeather: LiveData<List<SavedHourlyWeather>>
+    var dailyWeather: LiveData<List<SavedDailyWeather>>
     var currentCity: LiveData<CurrentCity>
     var favouriteCities: LiveData<List<FavouriteCity>>
     var selectedCity = MutableLiveData<Geoname>()
@@ -35,27 +35,11 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
     init {
         val forecastDao = ForecastDatabase.getDatabase(application).forecastDao()
         repository = ForecastRepository(forecastDao)
-        viewModelScope.launch(Dispatchers.IO) {
-            currentWeather = repository.savedCurrentWeather()
-            hourlyWeather = repository.savedHourlyWeather()
-            dailyWeather = repository.savedDailyWeather()
-        }
+        currentWeather = repository.savedCurrentWeather()
+        hourlyWeather = repository.savedHourlyWeather()
+        dailyWeather = repository.savedDailyWeather()
         currentCity = repository.savedCurrentCity
         favouriteCities = repository.favouriteCities
-    }
-
-    fun geoNameToCurrentCity(geoName: Geoname): CurrentCity {
-        return CurrentCity(
-            geoName.name,
-            geoName.adminName1,
-            geoName.countryName,
-            geoName.latitude,
-            geoName.longitude
-        )
-    }
-
-    fun setSelectedAsGPS() {
-        cityGps.value = geoNameToCurrentCity(selectedCity.value!!)
     }
 
     fun setSelectedCity(city: Geoname) {
@@ -72,8 +56,8 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
         )
     }
 
-    fun setCurrentAsSelected(){
-        selectedCity.value= Geoname(
+    fun setCurrentAsSelected() {
+        selectedCity.value = Geoname(
             currentCity.value?.adminName1!!,
             currentCity.value?.countryName!!,
             currentCity.value?.latitude!!,
@@ -81,7 +65,24 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
             currentCity.value?.name!!
         )
     }
-  
+
+    fun setSelectedAsCurrent() {
+        deleteCurrentCityTable()
+        val city = CurrentCity(
+            selectedCity.value!!.name,
+            selectedCity.value!!.adminName1,
+            selectedCity.value!!.countryName,
+            selectedCity.value!!.latitude,
+            selectedCity.value!!.longitude
+        )
+        insertCurrentCity(city)
+        currentCity = repository.savedCurrentCity
+    }
+
+    fun setSelectedAsGPS() {
+        cityGps.value = geoNameToCurrentCity(selectedCity.value!!)
+    }
+
     fun putSelectedIntoFavouritesDB(geoName: Geoname = selectedCity.value!!) {
         val city = FavouriteCity(
             geoName.name,
@@ -100,24 +101,6 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                 deleteFavouriteCity(city)
         }
         favouriteCities = repository.favouriteCities
-    }
-
-    fun setSelectedAsCurrent() {
-        deleteCurrentCityTable()
-        val city = CurrentCity(
-            selectedCity.value!!.name,
-            selectedCity.value!!.adminName1,
-            selectedCity.value!!.countryName,
-            selectedCity.value!!.latitude,
-            selectedCity.value!!.longitude
-        )
-        insertCurrentCity(city)
-        currentCity = repository.savedCurrentCity
-    }
-
-    private fun getCoordinatesOfCity(city: CurrentCity) {
-        latitude = city.latitude.toFloat()
-        longitude = city.longitude.toFloat()
     }
 
     fun getForecast(city: CurrentCity) {
@@ -216,7 +199,6 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                             hourlyWeather = repository.savedHourlyWeather()
                             dailyWeather = repository.savedDailyWeather()
                         }
-
                     } else {
                         Log.d("viewmodel", "on response, but not successful")
                         Log.d("viewmodel", response.errorBody().toString())
@@ -239,11 +221,11 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                     val responseBody: ResponseCity = response.body()!!
                     val list = mutableListOf<Geoname>()
                     for (location in responseBody.geonames) {
-                        if (location.name != null && location.name != "" &&
-                            location.adminName1 != null && location.adminName1 != "" &&
-                            location.countryName != null && location.countryName != "" &&
-                            location.latitude != null && location.latitude != "" &&
-                            location.longitude != null && location.longitude != ""
+                        if (location.name != "" &&
+                            location.adminName1 != "" &&
+                            location.countryName != "" &&
+                            location.latitude != "" &&
+                            location.longitude != ""
                         ) {
                             list.add(location)
                         }
@@ -255,6 +237,21 @@ class WeatherViewModel(application: Application) : AndroidViewModel(application)
                 }
             }
         })
+    }
+
+    private fun getCoordinatesOfCity(city: CurrentCity) {
+        latitude = city.latitude.toFloat()
+        longitude = city.longitude.toFloat()
+    }
+
+    private fun geoNameToCurrentCity(geoName: Geoname): CurrentCity {
+        return CurrentCity(
+            geoName.name,
+            geoName.adminName1,
+            geoName.countryName,
+            geoName.latitude,
+            geoName.longitude
+        )
     }
 
     //region Room functions for forecast

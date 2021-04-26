@@ -67,7 +67,7 @@ class SearchFragment : Fragment() {
                 }
             })
         }).map { text -> text.trim() }
-            .debounce(200, TimeUnit.MILLISECONDS)
+            .debounce(100, TimeUnit.MILLISECONDS)
             .distinctUntilChanged()
             .filter { text -> text.isNotBlank() }
             .subscribe { text ->
